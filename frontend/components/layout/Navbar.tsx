@@ -21,10 +21,9 @@ export default function Navbar() {
                     <Link href="/submit" className="hover:text-blue-500">Submit News</Link>
                     <Link href="/about" className="hover:text-blue-500">About</Link>
                     <Link href="/contact" className="hover:text-blue-500">Contact</Link>
-                    <Link href="/gallery" className="hover:text-blue-500">Gallery</Link>
                 </div>
 
-                <Link href="/dashboard">
+                <Link href="/login">
                     <button className="ml-4 hidden md:inline-block px-4 py-2 bg-blue-600 text-white rounded-lg">
                         Get Started
                     </button>
@@ -43,7 +42,6 @@ export default function Navbar() {
                     <Link href="/submit" className="block px-6 py-3 hover:bg-gray-100">Submit News</Link>
                     <Link href="/about" className="block px-6 py-3 hover:bg-gray-100">About</Link>
                     <Link href="/contact" className="block px-6 py-3 hover:bg-gray-100">Contact</Link>
-                    <Link href="/gallery" className="block px-6 py-3 hover:bg-gray-100">Gallery</Link>
                 </div>
             )}
         </nav>

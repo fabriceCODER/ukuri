@@ -11,7 +11,7 @@ export default function ArticlesPage() {
                 <h2 className="text-3xl font-bold text-center mb-6">All Articles</h2>
                 <div className="grid md:grid-cols-3 gap-6">
                     {articles.map((article) => (
-                        <ArticleCard key={article.id} title={""} category={""} image={""}/>
+                        <ArticleCard key={article.id} title={article.title} category={article.category} image={article.image} />
                     ))}
                 </div>
             </section>

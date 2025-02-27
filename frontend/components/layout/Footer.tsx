@@ -3,11 +3,11 @@ import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaEnvelope, FaPhoneAlt,
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-900 py-12 mt-12 text-center text-white">
+        <footer className="bg-blue-600 py-12 mt-12 text-center text-white">
             <div className="container mx-auto grid md:grid-cols-3 gap-6 text-left">
-                <div>
+                <div className="mx-4">
                     <h2 className="text-2xl font-bold">NewsHub</h2>
-                    <p className="mt-2 text-gray-400">
+                    <p className="mt-2 text-white">
                         Your trusted source for real-time, reliable news across technology, business, sports, and world affairs.
                     </p>
                 </div>
@@ -16,9 +16,8 @@ const Footer = () => {
                     <h3 className="font-bold text-lg">Quick Links</h3>
                     <ul className="space-y-2 mt-2">
                         <li><Link href="/">Home</Link></li>
-                        <li><Link href="/articles">Articles</Link></li>
-                        <li><Link href="/about">About</Link></li>
-                        <li><Link href="/contact">Contact</Link></li>
+                        <li><Link href="/guide">Guide</Link></li>
+                        <li><Link href="/faq">FAQ</Link></li>
                         <li><Link href="/privacy">Privacy Policy</Link></li>
                         <li><Link href="/terms">Terms of Service</Link></li>
                     </ul>
@@ -26,13 +25,13 @@ const Footer = () => {
 
                 <div>
                     <h3 className="font-bold text-lg">Contact Us</h3>
-                    <p className="mt-2 flex items-center gap-2 text-gray-400">
-                        <FaMapMarkerAlt /> 123 NewsHub Street, New York, NY 10001
+                    <p className="mt-2 flex items-center gap-2 text-white">
+                        <FaMapMarkerAlt /> 123 NewsHub Street
                     </p>
-                    <p className="flex items-center gap-2 text-gray-400">
+                    <p className="flex items-center gap-2 text-white">
                         <FaPhoneAlt /> +1 (234) 567-8900
                     </p>
-                    <p className="flex items-center gap-2 text-gray-400">
+                    <p className="flex items-center gap-2 text-white">
                         <FaEnvelope /> contact@newshub.com
                     </p>
                     <h3 className="font-bold text-lg mt-4">Follow Us</h3>
@@ -44,7 +43,7 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
-            <p className="mt-8 text-gray-500">&copy; {new Date().getFullYear()} NewsHub. All rights reserved.</p>
+            <p className="mt-8 text-white">&copy; {new Date().getFullYear()} NewsHub. All rights reserved.</p>
         </footer>
     );
 };
