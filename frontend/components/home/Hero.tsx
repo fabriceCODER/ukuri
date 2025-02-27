@@ -6,11 +6,11 @@ import { FaNewspaper, FaGlobe, FaUsers } from "react-icons/fa";
 
 const Hero = () => {
     return (
-        <section className="relative w-full h-[80vh] flex items-center my-20 justify-center bg-gray-900 text-white">
+        <section className="relative w-full h-[80vh] flex items-center my-32 justify-center bg-gray-900 text-white">
             {/* Background Image */}
             <div className="absolute inset-0">
                 <Image
-                    src="/images/back.jpg"
+                    src="/images/back.jpeg"
                     alt="News Background"
                     layout="fill"
                     objectFit="cover"
