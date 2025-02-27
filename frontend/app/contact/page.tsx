@@ -1,13 +1,10 @@
 import Layout from "@/components/layout/Layout";
-import Heading from "@/components/layout/Heading";
 import { FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 
 export default function ContactPage() {
     return (
         <Layout>
-            <Heading title="Contact Us" subtitle="Get in touch with us for inquiries or feedback." />
-
-            <section className="container mx-auto px-6 py-12 text-center">
+            <section className="container my-32 mx-auto px-6 py-12 text-center">
                 <h2 className="text-3xl font-bold mb-6">Send Us a Message</h2>
 
                 <form className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
