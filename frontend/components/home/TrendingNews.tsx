@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 const trendingNews = [
-    { id: 1, title: "Stock Market Hits Record High", link: "/articles/1" },
-    { id: 2, title: "Tech Giants Release New AI Models", link: "/articles/2" },
-    { id: 3, title: "Sports Championships Begin This Weekend", link: "/articles/3" },
+    { id: 1, title: "Stock Market Hits Record High", link: "/stock-market.jpg" },
+    { id: 2, title: "Tech Giants Release New AI Models", link: "/newai.jpg" },
+    { id: 3, title: "Sports Championships Begin This Weekend", link: "/sports.jpg" },
 ];
 
 const TrendingNews = () => {
