@@ -3,7 +3,7 @@ import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
 
 const Footer = () => {
     return (
-        <footer className="bg-gray-100 py-8 mt-12 text-center text-gray-600">
+        <footer className="bg-gray-900 py-8 mt-12 text-center text-white">
             <div className="container mx-auto grid md:grid-cols-3 gap-6">
                 <div>
                     <h2 className="text-xl font-bold">NewsHub</h2>
@@ -23,10 +23,10 @@ const Footer = () => {
                 <div>
                     <h3 className="font-bold">Follow Us</h3>
                     <div className="flex justify-center space-x-4">
-                        <FaFacebook size={24} />
-                        <FaTwitter size={24} />
-                        <FaLinkedin size={24} />
-                        <FaInstagram size={24} />
+                        <FaFacebook size={24} href="https://www.facebook.com/NewsHub" />
+                        <FaTwitter size={24} href="https://www.x.com/NewsHub" />
+                        <FaLinkedin size={24} href="https://www.linkedin.com/NewsHub" />
+                        <FaInstagram size={24} href="https://www.facek.com/NewsHub" />
                     </div>
                 </div>
             </div>
