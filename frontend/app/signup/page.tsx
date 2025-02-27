@@ -1,13 +1,14 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import Spinner from "@/components/common/Spinner";
+import { Mail, Lock, User, Github, Linkedin, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Signup = () => {
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [confirmPassword, setConfirmPassword] = useState<string>("");
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
@@ -24,16 +25,12 @@ const Signup = () => {
         try {
             const response = await fetch("/api/auth/signup", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
 
             const data = await response.json();
-
             if (response.ok) {
-                // Redirect to login page after successful signup
                 router.push("/login");
             } else {
                 setError(data?.message || "Signup failed. Please try again.");
@@ -46,70 +43,92 @@ const Signup = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100">
-            <div className="bg-white p-8 rounded-md shadow-lg w-full sm:w-96">
-                <h2 className="text-2xl font-bold text-center mb-4">Create a New Account</h2>
+        <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-indigo-600 p-4">
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white p-8 rounded-lg shadow-xl w-full sm:w-96"
+            >
+                <div className="text-center mb-6">
+                    <User className="w-12 h-12 mx-auto text-blue-500" />
+                    <h2 className="text-2xl font-bold mt-2">Create an Account</h2>
+                    <p className="text-gray-500 text-sm">Join us and start your journey!</p>
+                </div>
 
-                {error && <div className="bg-red-500 text-white p-2 mb-4 rounded">{error}</div>}
+                {error && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="bg-red-500 text-white text-center p-2 mb-4 rounded"
+                    >
+                        {error}
+                    </motion.div>
+                )}
 
                 <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                    <div className="mb-4 relative">
+                        <Mail className="absolute left-3 top-3 text-gray-400" />
                         <input
                             type="email"
-                            id="email"
-                            name="email"
+                            placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="mt-2 p-2 w-full border border-gray-300 rounded-md"
+                            className="pl-10 p-2 w-full border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                             required
                         />
                     </div>
 
-                    <div className="mb-4">
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+                    <div className="mb-4 relative">
+                        <Lock className="absolute left-3 top-3 text-gray-400" />
                         <input
                             type="password"
-                            id="password"
-                            name="password"
+                            placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="mt-2 p-2 w-full border border-gray-300 rounded-md"
+                            className="pl-10 p-2 w-full border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                             required
                         />
                     </div>
 
-                    <div className="mb-6">
-                        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <div className="mb-6 relative">
+                        <Lock className="absolute left-3 top-3 text-gray-400" />
                         <input
                             type="password"
-                            id="confirmPassword"
-                            name="confirmPassword"
+                            placeholder="Confirm Password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="mt-2 p-2 w-full border border-gray-300 rounded-md"
+                            className="pl-10 p-2 w-full border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                             required
                         />
                     </div>
 
-                    <div className="mb-4 flex justify-between items-center">
+                    <button
+                        type="submit"
+                        className="w-full flex items-center justify-center bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? <Loader2 className="animate-spin" /> : "Sign Up"}
+                    </button>
+
+                    <p className="text-center text-sm text-gray-600 mt-4">
+                        Already have an account?{" "}
+                        <a href="/login" className="text-blue-500 hover:underline">Login</a>
+                    </p>
+
+                    <div className="mt-4">
                         <button
-                            type="submit"
-                            className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
-                            disabled={isLoading}
-                        >
-                            {isLoading ? <Spinner /> : "Sign Up"}
+                            className="w-full flex items-center justify-center bg-gray-800 text-white p-2 rounded-md hover:bg-gray-900 transition">
+                            <Github className="mr-2"/>
+                            Sign Up with GitHub
+                        </button>
+                        <button
+                            className="w-full my-2 flex items-center justify-center bg-gray-800 text-white p-2 rounded-md hover:bg-gray-900 transition">
+                            <Linkedin className="mr-2"/>
+                            Sign Up with LinkedIn
                         </button>
                     </div>
                 </form>
-
-                <p className="text-center text-sm text-gray-600">
-                    Already have an account?{" "}
-                    <a href="/login" className="text-blue-500 hover:underline">
-                        Login
-                    </a>
-                </p>
-            </div>
+            </motion.div>
         </div>
     );
 };

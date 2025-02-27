@@ -1,14 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation"; // ✅ Correct import for App Router
-import Spinner from "@/components/common/Spinner";
+import { useRouter } from "next/navigation";
+import { Mail, Lock, Github,LinkedinIcon, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
 
 const Login = () => {
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const router = useRouter(); // Now correctly imported
+    const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -22,11 +23,10 @@ const Login = () => {
             });
 
             const data = await response.json();
-
             if (response.ok) {
-                router.push("/dashboard"); // ✅ Redirect on successful login
+                router.push("/dashboard");
             } else {
-                setError(data?.message || "Login failed. Please try again.");
+                setError(data?.message || "Invalid credentials. Please try again.");
             }
         } catch (err) {
             setError("Something went wrong. Please try again later.");
@@ -36,57 +36,86 @@ const Login = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100">
-            <div className="bg-white p-8 rounded-md shadow-lg w-full sm:w-96">
-                <h2 className="text-2xl font-bold text-center mb-4">Login to Your Account</h2>
+        <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-indigo-600 to-purple-500 p-4">
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white p-8 rounded-lg shadow-xl w-full sm:w-96"
+            >
+                <div className="text-center mb-6">
+                    <Lock className="w-12 h-12 mx-auto text-indigo-600" />
+                    <h2 className="text-2xl font-bold mt-2">Welcome Back!</h2>
+                    <p className="text-gray-500 text-sm">Log in to your account</p>
+                </div>
 
-                {error && <div className="bg-red-500 text-white p-2 mb-4 rounded">{error}</div>}
+                {error && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="bg-red-500 text-white text-center p-2 mb-4 rounded"
+                    >
+                        {error}
+                    </motion.div>
+                )}
 
                 <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                    <div className="mb-4 relative">
+                        <Mail className="absolute left-3 top-3 text-gray-400" />
                         <input
                             type="email"
-                            id="email"
-                            name="email"
+                            placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="mt-2 p-2 w-full border border-gray-300 rounded-md"
+                            className="pl-10 p-2 w-full border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
                             required
                         />
                     </div>
 
-                    <div className="mb-6">
-                        <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+                    <div className="mb-4 relative">
+                        <Lock className="absolute left-3 top-3 text-gray-400" />
                         <input
                             type="password"
-                            id="password"
-                            name="password"
+                            placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="mt-2 p-2 w-full border border-gray-300 rounded-md"
+                            className="pl-10 p-2 w-full border border-gray-300 rounded-md focus:ring focus:ring-indigo-200"
                             required
                         />
                     </div>
 
-                    <div className="mb-4 flex justify-between items-center">
+                    <div className="mb-4 text-right">
+                        <a href="/forgot-password" className="text-sm text-indigo-500 hover:underline">
+                            Forgot Password?
+                        </a>
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="w-full flex items-center justify-center bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 transition"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? <Loader2 className="animate-spin" /> : "Log In"}
+                    </button>
+
+                    <p className="text-center text-sm text-gray-600 mt-4">
+                        Don’t have an account?{" "}
+                        <a href="/signup" className="text-indigo-500 hover:underline">Sign Up</a>
+                    </p>
+
+                    <div className="mt-4">
                         <button
-                            type="submit"
-                            className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
-                            disabled={isLoading}
-                        >
-                            {isLoading ? <Spinner /> : "Login"}
+                            className="w-full flex items-center justify-center bg-gray-800 text-white p-2 rounded-md hover:bg-gray-900 transition mb-2">
+                            <Github className="mr-2"/>
+                            Log In with GitHub
+                        </button>
+                        <button
+                            className="w-full flex items-center justify-center bg-gray-800 text-white p-2 rounded-md hover:bg-gray-900 transition mb-2">
+                            <LinkedinIcon className="mr-2"/>
+                            Log In with LinkedIn
                         </button>
                     </div>
                 </form>
-
-                <p className="text-center text-sm text-gray-600">
-                    Don&#39;t have an account?{" "}
-                    <a href="/signup" className="text-blue-500 hover:underline">
-                        Sign up
-                    </a>
-                </p>
-            </div>
+            </motion.div>
         </div>
     );
 };
