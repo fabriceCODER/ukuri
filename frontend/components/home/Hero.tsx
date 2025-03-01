@@ -6,22 +6,12 @@ import { FaNewspaper, FaGlobe, FaUsers } from "react-icons/fa";
 
 const Hero = () => {
     return (
-        <section className="relative w-full h-[80vh] flex items-center my-32 justify-center bg-gray-900 text-white">
-            {/* Background Image */}
-            <div className="absolute inset-0">
-                <Image
-                    src="/images/back.jpeg"
-                    alt="News Background"
-                    layout="fill"
-                    objectFit="cover"
-                    className="opacity-50"
-                    priority
-                />
-            </div>
-
+        <section className="w-full h-[80vh] my-32 flex flex-col items-center justify-center text-white px-6 md:px-12 bg-gradient-to-r from-gray-900 to-gray-800">
             {/* Hero Content */}
-            <div className="relative z-10 text-center px-6 md:px-12">
-                <h1 className="text-4xl md:text-6xl font-bold">Stay Informed, Stay Ahead</h1>
+            <div className="text-center max-w-3xl">
+                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
+                    Stay Informed, Stay Ahead
+                </h1>
                 <p className="mt-4 text-lg md:text-xl text-gray-300">
                     Get the latest news from around the world, covering all domains.
                 </p>
@@ -39,21 +29,32 @@ const Hero = () => {
                         </button>
                     </Link>
                 </div>
+            </div>
 
-                {/* Feature Icons */}
-                <div className="mt-10 flex justify-center gap-6 text-gray-300">
-                    <div className="flex flex-col items-center">
-                        <FaNewspaper size={40} />
-                        <p className="mt-2 text-sm">Latest News</p>
-                    </div>
-                    <div className="flex flex-col items-center">
-                        <FaGlobe size={40} />
-                        <p className="mt-2 text-sm">Global Coverage</p>
-                    </div>
-                    <div className="flex flex-col items-center">
-                        <FaUsers size={40} />
-                        <p className="mt-2 text-sm">Community Reporting</p>
-                    </div>
+            {/* Home Image */}
+            <div className="mt-12">
+                <Image
+                    src="/images/illustration.jpg"
+                    alt="News Illustration"
+                    width={500}
+                    height={300}
+                    priority
+                />
+            </div>
+
+            {/* Feature Icons */}
+            <div className="mt-8 flex justify-center gap-10 text-gray-300">
+                <div className="flex flex-col items-center">
+                    <FaNewspaper size={40} className="text-blue-400" />
+                    <p className="mt-2 text-sm">Latest News</p>
+                </div>
+                <div className="flex flex-col items-center">
+                    <FaGlobe size={40} className="text-green-400" />
+                    <p className="mt-2 text-sm">Global Coverage</p>
+                </div>
+                <div className="flex flex-col items-center">
+                    <FaUsers size={40} className="text-orange-400" />
+                    <p className="mt-2 text-sm">Community Reporting</p>
                 </div>
             </div>
         </section>

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Mail, Lock, Github,LinkedinIcon, Loader2 } from "lucide-react";
+import { Mail, Lock, Github, LinkedinIcon, Facebook, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Login = () => {
@@ -40,7 +40,7 @@ const Login = () => {
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white p-8 rounded-lg shadow-xl w-full sm:w-96"
+                className="bg-white p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-md"
             >
                 <div className="text-center mb-6">
                     <Lock className="w-12 h-12 mx-auto text-indigo-600" />
@@ -102,16 +102,19 @@ const Login = () => {
                         <a href="/signup" className="text-indigo-500 hover:underline">Sign Up</a>
                     </p>
 
-                    <div className="mt-4">
-                        <button
-                            className="w-full flex items-center justify-center bg-gray-800 text-white p-2 rounded-md hover:bg-gray-900 transition mb-2">
-                            <Github className="mr-2"/>
-                            Log In with GitHub
+                    {/* OAuth Buttons - Improved for mobile */}
+                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <button className="flex items-center justify-center bg-gray-800 text-white p-2 rounded-md hover:bg-gray-900 transition">
+                            <Github className="mr-2" />
+                            GitHub
                         </button>
-                        <button
-                            className="w-full flex items-center justify-center bg-gray-800 text-white p-2 rounded-md hover:bg-gray-900 transition mb-2">
-                            <LinkedinIcon className="mr-2"/>
-                            Log In with LinkedIn
+                        <button className="flex items-center justify-center bg-blue-700 text-white p-2 rounded-md hover:bg-blue-800 transition">
+                            <LinkedinIcon className="mr-2" />
+                            LinkedIn
+                        </button>
+                        <button className="flex items-center justify-center bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition">
+                            <Facebook className="mr-2" />
+                            Facebook
                         </button>
                     </div>
                 </form>
