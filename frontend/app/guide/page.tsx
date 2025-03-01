@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FaSearch, FaEdit, FaGlobe, FaRegNewspaper } from "react-icons/fa";
+import Navbar from "@/components/layout/Navbar";
 
 const guideSections = [
     {
@@ -46,6 +47,7 @@ const GuidePage = () => {
 
     return (
         <section className="max-w-5xl mx-auto my-20 px-6">
+            <Navbar/>
             {/* Page Header */}
             <div className="text-center">
                 <h1 className="text-4xl font-bold text-gray-900">How to Use Our Platform</h1>
