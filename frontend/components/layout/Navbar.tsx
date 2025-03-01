@@ -17,7 +17,7 @@ export default function Navbar() {
                 <div className="hidden md:flex space-x-6">
                     <Link href="/" className="hover:text-blue-500">Home</Link>
                     <Link href="/articles" className="hover:text-blue-500">Articles</Link>
-                    <Link href="/map" className="hover:text-blue-500">World Map</Link>
+                    <Link href="/guide" className="hover:text-blue-500">Tutorials</Link>
                     <Link href="/submit" className="hover:text-blue-500">Submit News</Link>
                     <Link href="/about" className="hover:text-blue-500">About</Link>
                     <Link href="/contact" className="hover:text-blue-500">Contact</Link>
@@ -38,7 +38,7 @@ export default function Navbar() {
                 <div className="md:hidden bg-white shadow-md absolute w-full">
                     <Link href="/" className="block px-6 py-3 hover:bg-gray-100">Home</Link>
                     <Link href="/articles" className="block px-6 py-3 hover:bg-gray-100">Articles</Link>
-                    <Link href="/map" className="block px-6 py-3 hover:bg-gray-100">World Map</Link>
+                    <Link href="/frontend/app/tutorial" className="block px-6 py-3 hover:bg-gray-100">World Map</Link>
                     <Link href="/submit" className="block px-6 py-3 hover:bg-gray-100">Submit News</Link>
                     <Link href="/about" className="block px-6 py-3 hover:bg-gray-100">About</Link>
                     <Link href="/contact" className="block px-6 py-3 hover:bg-gray-100">Contact</Link>

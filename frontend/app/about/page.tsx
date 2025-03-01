@@ -4,7 +4,7 @@ import { FaGlobe, FaUsers, FaBullseye, FaNewspaper } from "react-icons/fa";
 export default function AboutPage() {
     return (
         <Layout>
-            <section className="container mx-auto my-32 px-6 py-12 text-center">
+            <section className="container mx-auto my-28 px-6 py-12 text-center">
                 <h2 className="text-3xl font-bold mb-4 flex justify-center items-center gap-2">
                     <FaNewspaper className="text-blue-500" /> Who We Are
                 </h2>
