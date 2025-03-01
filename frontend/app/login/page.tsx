@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, Github, LinkedinIcon, Facebook, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import Navbar from "@/components/layout/Navbar";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -84,7 +85,7 @@ const Login = () => {
                     </div>
 
                     <div className="mb-4 text-right">
-                        <a href="/forgot-password" className="text-sm text-indigo-500 hover:underline">
+                        <a href="/forgot" className="text-sm text-indigo-500 hover:underline">
                             Forgot Password?
                         </a>
                     </div>
