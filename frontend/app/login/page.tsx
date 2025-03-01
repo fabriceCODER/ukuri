@@ -88,6 +88,10 @@ const Login = () => {
                         <a href="/forgot" className="text-sm text-indigo-500 hover:underline">
                             Forgot Password?
                         </a>
+                        <a href="/" className="text-sm mx-12 text-gray-900 hover:underline">
+                            Back to Home Page
+                        </a>
+
                     </div>
 
                     <button
@@ -105,10 +109,6 @@ const Login = () => {
 
                     {/* OAuth Buttons - Improved for mobile */}
                     <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <button className="flex items-center justify-center bg-gray-800 text-white p-2 rounded-md hover:bg-gray-900 transition">
-                            <Github className="mr-2" />
-                            GitHub
-                        </button>
                         <button className="flex items-center justify-center bg-blue-700 text-white p-2 rounded-md hover:bg-blue-800 transition">
                             <LinkedinIcon className="mr-2" />
                             LinkedIn

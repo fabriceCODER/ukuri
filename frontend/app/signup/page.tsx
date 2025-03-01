@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Mail, Lock, User, Github, Linkedin, Loader2 } from "lucide-react";
+import {Mail, Lock, User, Linkedin, Loader2, Facebook} from "lucide-react";
 import { motion } from "framer-motion";
 
 const Signup = () => {
@@ -118,7 +118,7 @@ const Signup = () => {
                     <div className="mt-4">
                         <button
                             className="w-full flex items-center justify-center bg-gray-800 text-white p-2 rounded-md hover:bg-gray-900 transition">
-                            <Github className="mr-2"/>
+                            <Facebook className="mr-2"/>
                             Sign Up with GitHub
                         </button>
                         <button
