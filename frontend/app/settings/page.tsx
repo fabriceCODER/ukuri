@@ -2,115 +2,149 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link"; // Import Link for navigation
+
+type SettingsState = {
+    username: string;
+    email: string;
+    notifications: { email: boolean; push: boolean };
+    privacy: { showProfile: boolean; searchEngine: boolean };
+    theme: string;
+};
 
 const Settings = () => {
-    const [settings, setSettings] = useState({
+    const [settings, setSettings] = useState<SettingsState>({
         username: "JohnDoe",
         email: "johndoe@example.com",
-        notifications: {
-            email: true,
-            push: false,
-        },
+        notifications: { email: true, push: false },
+        privacy: { showProfile: true, searchEngine: false },
         theme: "light",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSettings({ ...settings, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setSettings((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleToggle = (field: "email" | "push") => {
-        setSettings({
-            ...settings,
-            notifications: {
-                ...settings.notifications,
-                [field]: !settings.notifications[field],
-            },
-        });
-    };
+    const handleToggle = <T extends keyof SettingsState>(
+        section: T,
+        field: keyof SettingsState[T] & string
+    ) => {
 
-    const handleThemeChange = (theme: "light" | "dark") => {
-        setSettings({ ...settings, theme });
-        document.documentElement.classList.toggle("dark", theme === "dark");
+        setSettings((prev) => ({
+            ...prev,
+            [section]: { ...prev[section], [field]: !prev[section][field] },
+        }));
     };
 
     return (
-        <section className="max-w-3xl mx-auto my-20 p-6 bg-white dark:bg-gray-900 shadow-md rounded-lg">
+        <section className="max-w-4xl mx-auto my-20 p-8 bg-white shadow-lg rounded-lg">
             <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
                 className="text-center"
             >
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Settings</h1>
-                <p className="text-gray-600 dark:text-gray-300 mt-2">Manage your account preferences</p>
+                <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
+                <p className="text-gray-600 mt-2">Manage your account preferences and privacy</p>
+                <Link href="/" legacyBehavior>
+                    <a className="mt-2 inline-block text-blue-500 hover:underline">Back to Home</a>
+                </Link>
             </motion.div>
 
-            {/* Account Settings */}
-            <div className="mt-6">
-                <label className="block font-medium text-gray-700 dark:text-gray-300">Username</label>
-                <input
-                    type="text"
-                    name="username"
-                    value={settings.username}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded-md dark:bg-gray-800 dark:text-white"
-                />
-
-                <label className="block mt-4 font-medium text-gray-700 dark:text-gray-300">Email</label>
-                <input
-                    type="email"
-                    name="email"
-                    value={settings.email}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded-md dark:bg-gray-800 dark:text-white"
-                />
-            </div>
-
-            {/* Notification Preferences */}
-            <div className="mt-6">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Notifications</h2>
-                <div className="mt-3 flex items-center justify-between">
-                    <span className="text-gray-700 dark:text-gray-300">Email Notifications</span>
-                    <input
-                        type="checkbox"
-                        checked={settings.notifications.email}
-                        onChange={() => handleToggle("email")}
-                        className="w-5 h-5 cursor-pointer"
-                    />
-                </div>
-                <div className="mt-3 flex items-center justify-between">
-                    <span className="text-gray-700 dark:text-gray-300">Push Notifications</span>
-                    <input
-                        type="checkbox"
-                        checked={settings.notifications.push}
-                        onChange={() => handleToggle("push")}
-                        className="w-5 h-5 cursor-pointer"
-                    />
+            {/* Account Information */}
+            <div className="mt-8">
+                <h2 className="text-xl font-semibold text-gray-900">Account Information</h2>
+                <div className="mt-4 space-y-4">
+                    <div>
+                        <label className="block font-medium text-gray-700">Username</label>
+                        <input
+                            type="text"
+                            name="username"
+                            value={settings.username}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded-md bg-gray-100"
+                        />
+                    </div>
+                    <div>
+                        <label className="block font-medium text-gray-700">Email</label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={settings.email}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded-md bg-gray-100"
+                        />
+                    </div>
                 </div>
             </div>
 
-            {/* Theme Settings */}
-            <div className="mt-6">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Theme</h2>
-                <div className="flex gap-4 mt-3">
-                    <button
-                        className={`px-4 py-2 rounded-md ${settings.theme === "light" ? "bg-blue-600 text-white" : "bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white"}`}
-                        onClick={() => handleThemeChange("light")}
-                    >
-                        Light Mode
+            {/* Notifications */}
+            <div className="mt-8">
+                <h2 className="text-xl font-semibold text-gray-900">Notifications</h2>
+                <div className="mt-4 space-y-3">
+                    <label className="flex items-center justify-between">
+                        <span className="text-gray-700">Email Notifications</span>
+                        <input
+                            type="checkbox"
+                            checked={settings.notifications.email}
+                            onChange={() => handleToggle("notifications", "email")}
+                            className="w-5 h-5 cursor-pointer"
+                        />
+                    </label>
+                    <label className="flex items-center justify-between">
+                        <span className="text-gray-700">Push Notifications</span>
+                        <input
+                            type="checkbox"
+                            checked={settings.notifications.push}
+                            onChange={() => handleToggle("notifications", "push")}
+                            className="w-5 h-5 cursor-pointer"
+                        />
+                    </label>
+                </div>
+            </div>
+
+            {/* Privacy Settings */}
+            <div className="mt-8">
+                <h2 className="text-xl font-semibold text-gray-900">Privacy Settings</h2>
+                <div className="mt-4 space-y-3">
+                    <label className="flex items-center justify-between">
+                        <span className="text-gray-700">Show Profile Publicly</span>
+                        <input
+                            type="checkbox"
+                            checked={settings.privacy.showProfile}
+                            onChange={() => handleToggle("privacy", "showProfile")}
+                            className="w-5 h-5 cursor-pointer"
+                        />
+                    </label>
+                    <label className="flex items-center justify-between">
+                        <span className="text-gray-700">Allow Search Engines to Index Profile</span>
+                        <input
+                            type="checkbox"
+                            checked={settings.privacy.searchEngine}
+                            onChange={() => handleToggle("privacy", "searchEngine")}
+                            className="w-5 h-5 cursor-pointer"
+                        />
+                    </label>
+                </div>
+            </div>
+
+            {/* Security */}
+            <div className="mt-8">
+                <h2 className="text-xl font-semibold text-gray-900">Security</h2>
+                <div className="mt-4 space-y-4">
+                    <button className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition">
+                        Change Password
                     </button>
-                    <button
-                        className={`px-4 py-2 rounded-md ${settings.theme === "dark" ? "bg-blue-600 text-white" : "bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white"}`}
-                        onClick={() => handleThemeChange("dark")}
-                    >
-                        Dark Mode
+                    <button className="w-full py-2 bg-red-600 text-white rounded-md hover:bg-red-500 transition">
+                        Delete Account
                     </button>
                 </div>
             </div>
 
-            {/* Save Changes Button */}
-            <div className="flex justify-center mt-8">
-                <button className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500 transition">
+            {/* Save Changes */}
+            <div className="flex justify-center mt-10">
+                <button className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-500 transition">
                     Save Changes
                 </button>
             </div>

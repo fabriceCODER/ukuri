@@ -45,7 +45,7 @@ const Profile = () => {
             >
                 <h1 className="text-3xl font-bold text-gray-900">My Profile</h1>
                 <p className="text-gray-600 mt-2">Manage your personal details</p>
-                <Link href="/">
+                <Link href="/" legacyBehavior>
                     <a className="mt-2 inline-block text-blue-500 hover:underline">Back to Home</a>
                 </Link>
             </motion.div>
