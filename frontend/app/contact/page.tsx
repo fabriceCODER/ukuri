@@ -1,5 +1,6 @@
 import Layout from "@/components/layout/Layout";
-import { FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
+import { FaEnvelope, FaPhone, FaMapMarkerAlt, FaPaperPlane } from "react-icons/fa";
+
 
 export default function ContactPage() {
     return (
@@ -39,8 +40,9 @@ export default function ContactPage() {
                         ></textarea>
                     </div>
 
-                    <button className="w-full bg-blue-600 text-white p-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition duration-300">
-                        Send Message
+                    <button
+                        className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 flex items-center justify-center gap-2">
+                        <FaPaperPlane/> Send Message
                     </button>
                 </form>
             </section>

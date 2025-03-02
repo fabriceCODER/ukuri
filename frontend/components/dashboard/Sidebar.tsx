@@ -14,7 +14,7 @@ const Sidebar = () => {
                 </li>
                 {/* Additional links for Admin or Creator */}
                 <li>
-                    <a href="/articles" className="block py-2 hover:bg-gray-700">Create Article</a>
+                    <a href="/submit" className="block py-2 hover:bg-gray-700">Create Article</a>
                 </li>
             </ul>
         </div>

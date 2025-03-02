@@ -84,12 +84,12 @@ const Login = () => {
                         />
                     </div>
 
-                    <div className="mb-4 text-right">
+                    <div className="mt-4 my-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <a href="/forgot" className="text-sm text-indigo-500 hover:underline">
                             Forgot Password?
                         </a>
-                        <a href="/" className="text-sm mx-12 text-gray-900 hover:underline">
-                            Back to Home Page
+                        <a href="/" className="text-sm mx-12 text-gray-900 hover:underline text-right">
+                            Back to Home
                         </a>
 
                     </div>
