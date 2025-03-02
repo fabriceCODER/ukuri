@@ -51,7 +51,6 @@ const Dashboard = () => {
                         <StatsWidget title="Total Views" value={user.totalViews} />
                         <StatsWidget title="Total Likes" value={user.totalLikes} />
                     </div>
-
                     {/* Role-based Panels */}
                     {user.role === "admin" ? <AdminPanel /> : <CreatorPanel />}
                 </div>
