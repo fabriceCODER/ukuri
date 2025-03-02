@@ -14,7 +14,7 @@ const CreatorPanel = () => {
                         Manage your articles, track performance, and customize settings.
                     </p>
                 </div>
-                <Link href="/settings">
+                <Link href="/creator/settings">
                     <button className="flex items-center gap-2 px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-100 transition">
                         <FaCogs className="text-gray-500" />
                         <span>Settings</span>
@@ -35,7 +35,7 @@ const CreatorPanel = () => {
                             </p>
                         </div>
                     </div>
-                    <Link href="/articles/new">
+                    <Link href="/submit">
                         <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition">
                             Start Writing
                         </button>

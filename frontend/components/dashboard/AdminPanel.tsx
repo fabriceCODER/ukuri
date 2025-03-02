@@ -14,7 +14,7 @@ const AdminPanel = () => {
                         Manage users, articles, and platform settings efficiently.
                     </p>
                 </div>
-                <Link href="/settings">
+                <Link href="/admin/settings">
                     <button className="flex items-center gap-2 px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-100 transition">
                         <FaCogs className="text-gray-500" />
                         <span>Settings</span>

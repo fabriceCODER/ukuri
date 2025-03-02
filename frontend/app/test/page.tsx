@@ -53,6 +53,7 @@ const Dashboard = () => {
                     </div>
                     {/* Role-based Panels */}
                     {user.role === "admin" ? <AdminPanel /> : <CreatorPanel />}
+                   <CreatorPanel />
                 </div>
             </div>
         </div>
