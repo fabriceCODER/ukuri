@@ -7,8 +7,8 @@ const AdminPanel = () => {
     return (
         <div className="bg-white p-8 shadow-md rounded-lg">
             {/* Header Section */}
-            <div className="flex items-center justify-between mb-6">
-                <div>
+            <div className="flex flex-col md:flex-row items-center justify-between mb-6">
+                <div className="text-center md:text-left mb-4 md:mb-0">
                     <h2 className="text-3xl font-bold text-gray-900">Admin Dashboard</h2>
                     <p className="text-lg text-gray-600 mt-1">
                         Manage users, articles, and platform settings efficiently.
@@ -23,7 +23,7 @@ const AdminPanel = () => {
             </div>
 
             {/* Admin Panel Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {/* Recent Articles */}
                 <div className="bg-gray-100 p-6 rounded-lg shadow-sm hover:shadow-md transition">
                     <div className="flex items-center gap-4">
