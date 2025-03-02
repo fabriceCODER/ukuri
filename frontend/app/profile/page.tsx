@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const Profile = () => {
     const [user, setUser] = useState({
@@ -10,6 +11,7 @@ const Profile = () => {
         email: "johndoe@example.com",
         bio: "News enthusiast and journalist.",
         profilePic: "/images/default-avatar.png", // Placeholder image
+        password: "", // Placeholder for password
     });
 
     const [editing, setEditing] = useState(false);
@@ -43,6 +45,9 @@ const Profile = () => {
             >
                 <h1 className="text-3xl font-bold text-gray-900">My Profile</h1>
                 <p className="text-gray-600 mt-2">Manage your personal details</p>
+                <Link href="/">
+                    <a className="mt-2 inline-block text-blue-500 hover:underline">Back to Home</a>
+                </Link>
             </motion.div>
 
             {/* Profile Image */}
@@ -101,6 +106,19 @@ const Profile = () => {
                     />
                 ) : (
                     <p className="p-2 bg-gray-100 rounded-md">{user.bio}</p>
+                )}
+
+                {editing && (
+                    <>
+                        <label className="block mt-4 font-medium text-gray-700">Password</label>
+                        <input
+                            type="password"
+                            name="password"
+                            value={updatedUser.password}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded-md"
+                        />
+                    </>
                 )}
             </div>
 
