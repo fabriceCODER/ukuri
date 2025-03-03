@@ -24,8 +24,8 @@ const AdminUsers = () => {
                             </thead>
                             <tbody>
                             <tr className="border-t">
-                                <td className="p-3">John Doe</td>
-                                <td className="p-3">john@example.com</td>
+                                <td className="p-3">Fabrice Ishimwe</td>
+                                <td className="p-3">fab@ukuri.com</td>
                                 <td className="p-3">Admin</td>
                                 <td className="p-3">
                                     <button className="text-blue-500 hover:underline">Edit</button> |
