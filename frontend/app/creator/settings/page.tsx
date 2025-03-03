@@ -31,10 +31,10 @@ const Settings = () => {
         field: keyof SettingsState[T] & string
     ) => {
 
-        setSettings((prev) => ({
-            ...prev,
-            [section]: { ...prev[section], [field]: !prev[section][field] },
-        }));
+        // setSettings((prev) => ({
+        //     ...prev,
+        //     [section]: { ...prev[section], [field]: !prev[section][field] },
+        // }));
     };
 
     return (

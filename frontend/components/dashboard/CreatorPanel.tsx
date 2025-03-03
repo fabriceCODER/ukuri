@@ -54,7 +54,7 @@ const CreatorPanel = () => {
                         </div>
                     </div>
                     <Link href="/creator/articles">
-                        <button className="mt-4 w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-500 transition">
+                        <button className="mt-4 w-full bg-green-600 text-white py-2 px-1.5 rounded-md hover:bg-green-500 transition">
                             Manage Articles
                         </button>
                     </Link>

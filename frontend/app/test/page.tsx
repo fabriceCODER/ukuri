@@ -17,7 +17,7 @@ const Dashboard = () => {
         totalComments: 20,
         totalViews: 100,
         totalLikes: 50,
-        role: "admin", // Change to "creator" to test
+        role: "creator", // Change to "creator" to test
     };
 
     if (isLoading) {
@@ -56,15 +56,15 @@ const Dashboard = () => {
                     </div>
 
                     {/* Role-Based Panels */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="px-8 py-10">
                         <div className="bg-white shadow-lg p-6 rounded-lg">
                             <h3 className="text-lg font-semibold text-gray-700 mb-4">Admin Panel</h3>
                             <AdminPanel />
                         </div>
-                        <div className="bg-white shadow-lg p-6 rounded-lg">
-                            <h3 className="text-lg font-semibold text-gray-700 mb-4">Creator Panel</h3>
-                            <CreatorPanel />
-                        </div>
+                        {/*<div className="bg-white shadow-lg p-6 rounded-lg">*/}
+                        {/*    <h3 className="text-lg font-semibold text-gray-700 mb-4">Creator Panel</h3>*/}
+                        {/*    <CreatorPanel />*/}
+                        {/*</div>*/}
                     </div>
                 </div>
             </div>
