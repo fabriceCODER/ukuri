@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import {Mail, Lock, User, Linkedin, Loader2, Facebook} from "lucide-react";
+import { Mail, Lock, User, Linkedin, Loader2, Facebook } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Signup = () => {
@@ -35,7 +35,8 @@ const Signup = () => {
             } else {
                 setError(data?.message || "Signup failed. Please try again.");
             }
-        } catch (err) {
+        } catch (error) {
+            console.error("Signup error:", error); // ✅ Log error for debugging
             setError("Something went wrong. Please try again later.");
         } finally {
             setIsLoading(false);

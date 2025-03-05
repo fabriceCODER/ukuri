@@ -24,7 +24,8 @@ const ForgotPassword = () => {
 
             // Show success message
             setMessage("If this email is registered, you will receive a password reset link.");
-        } catch (err) {
+        } catch (error) {
+            console.error("Password reset error:", error); // ✅ Logging error
             setError("Something went wrong. Please try again.");
         }
     };

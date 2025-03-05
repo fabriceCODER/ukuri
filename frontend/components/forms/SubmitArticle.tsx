@@ -1,5 +1,6 @@
+import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 interface ArticleFormData {
@@ -9,9 +10,8 @@ interface ArticleFormData {
     image: FileList | null;
 }
 
-
 const SubmitArticle = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm<ArticleFormData>(); // Use the type here
+    const { register, handleSubmit, formState: { errors } } = useForm<ArticleFormData>();
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
     const onSubmit: SubmitHandler<ArticleFormData> = async (data) => {
@@ -89,7 +89,15 @@ const SubmitArticle = () => {
                     onChange={handleImageChange}
                     className="input"
                 />
-                {imagePreview && <img src={imagePreview} alt="Image Preview" className="mt-2" />}
+                {imagePreview && (
+                    <Image
+                        src={imagePreview}
+                        alt="Image Preview"
+                        width={200} // Adjust width
+                        height={150} // Adjust height
+                        className="mt-2"
+                    />
+                )}
                 {errors.image && <p>{errors.image.message}</p>}
             </div>
 

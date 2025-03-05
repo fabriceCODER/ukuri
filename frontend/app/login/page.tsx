@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Mail, Lock, Github, LinkedinIcon, Facebook, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { Mail, Lock, LinkedinIcon, Facebook, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
-import Navbar from "@/components/layout/Navbar";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -29,7 +29,8 @@ const Login = () => {
             } else {
                 setError(data?.message || "Invalid credentials. Please try again.");
             }
-        } catch (err) {
+        } catch (error) {
+            console.error("Login error:", error); // ✅ Log the error
             setError("Something went wrong. Please try again later.");
         } finally {
             setIsLoading(false);
@@ -85,13 +86,12 @@ const Login = () => {
                     </div>
 
                     <div className="mt-4 my-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <a href="/forgot" className="text-sm text-indigo-500 hover:underline">
+                        <Link href="/forgot" className="text-sm text-indigo-500 hover:underline">
                             Forgot Password?
-                        </a>
-                        <a href="/" className="text-sm mx-12 text-gray-900 hover:underline text-right">
+                        </Link>
+                        <Link href="/" className="text-sm mx-12 text-gray-900 hover:underline text-right">
                             Back to Home
-                        </a>
-
+                        </Link>
                     </div>
 
                     <button
@@ -104,7 +104,9 @@ const Login = () => {
 
                     <p className="text-center text-sm text-gray-600 mt-4">
                         Don’t have an account?{" "}
-                        <a href="/signup" className="text-indigo-500 hover:underline">Sign Up</a>
+                        <Link href="/signup" className="text-indigo-500 hover:underline">
+                            Sign Up
+                        </Link>
                     </p>
 
                     {/* OAuth Buttons - Improved for mobile */}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link"; // Import Link for navigation
 
@@ -28,14 +28,20 @@ const Settings = () => {
 
     const handleToggle = <T extends keyof SettingsState>(
         section: T,
-        field: keyof SettingsState[T] & string
+        field: keyof NonNullable<SettingsState[T]> // Ensures section refers to an object
     ) => {
-
-        // setSettings((prev) => ({
-        //     ...prev,
-        //     [section]: { ...prev[section], [field]: !prev[section][field] },
-        // }));
+        if (typeof settings[section] === "object" && settings[section] !== null) {
+            setSettings((prev) => ({
+                ...prev,
+                [section]: {
+                    ...prev[section] as Record<string, boolean>, // Type assertion
+                    [field]: !prev[section][field]
+                }
+            }));
+        }
     };
+
+
 
     return (
         <section className="max-w-4xl mx-auto my-20 p-8 bg-white shadow-lg rounded-lg">

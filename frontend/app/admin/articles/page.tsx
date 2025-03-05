@@ -1,4 +1,5 @@
 "use client";
+
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import Sidebar from "@/components/dashboard/Sidebar";
 
