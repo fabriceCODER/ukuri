@@ -23,7 +23,7 @@ export default function Navbar() {
                     <Link href="/contact" className="hover:text-blue-500">Contact</Link>
                 </div>
 
-                <Link href="/test">
+                <Link href="/login">
                     <button className="ml-4 hidden md:inline-block px-4 py-2 bg-blue-600 text-white rounded-lg">
                         Get Started
                     </button>
