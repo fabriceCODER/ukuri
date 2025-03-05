@@ -4,7 +4,7 @@ import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaEnvelope, FaPhoneAlt,
 const Footer = () => {
     return (
         <footer className="bg-blue-600 py-12 mt-12 text-center text-white">
-            <div className="container mx-auto grid md:grid-cols-3 gap-6 text-left">
+            <div className="container grid md:grid-cols-3 gap-6 mx-4 text-left">
                 <div className="mx-4">
                     <h2 className="text-2xl font-bold">NewsHub</h2>
                     <p className="mt-2 text-white">
