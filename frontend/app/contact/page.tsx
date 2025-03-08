@@ -17,7 +17,7 @@ export default function ContactPage() {
                         <label className="block text-gray-700 font-semibold mb-2">Your Name</label>
                         <input
                             type="text"
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full p-3 border rounded-lg focus:outline-none ring-1 focus:ring-2 focus:ring-blue-500"
                             placeholder="John Doe"
                         />
                     </div>
@@ -26,7 +26,7 @@ export default function ContactPage() {
                         <label className="block text-gray-700 font-semibold mb-2">Your Email</label>
                         <input
                             type="email"
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full p-3 border rounded-lg ring-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="email@example.com"
                         />
                     </div>
@@ -34,7 +34,7 @@ export default function ContactPage() {
                     <div className="mb-4">
                         <label className="block text-gray-700 font-semibold mb-2">Message</label>
                         <textarea
-                            className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full p-3 border rounded-lg ring-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             rows={4}
                             placeholder="Your message here..."
                         ></textarea>
