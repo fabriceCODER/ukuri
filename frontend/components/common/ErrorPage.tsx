@@ -1,4 +1,3 @@
-// components/common/ErrorPage.tsx
 import Link from "next/link";
 
 interface ErrorPageProps {

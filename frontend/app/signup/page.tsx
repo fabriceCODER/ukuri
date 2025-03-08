@@ -36,7 +36,7 @@ const Signup = () => {
                 setError(data?.message || "Signup failed. Please try again.");
             }
         } catch (error) {
-            console.error("Signup error:", error); // ✅ Log error for debugging
+            console.error("Signup 404:", error); // ✅ Log 404 for debugging
             setError("Something went wrong. Please try again later.");
         } finally {
             setIsLoading(false);
