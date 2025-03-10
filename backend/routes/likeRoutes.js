@@ -1,6 +1,6 @@
 import express from "express";
-import { likeArticle, unlikeArticle, getLikesCount } from "../controllers/likeController";
-import authenticate from "../middlewares/authMiddleware";
+import { likeArticle, unlikeArticle, getLikesCount } from "../controllers/likeController.js";
+import authenticate from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 

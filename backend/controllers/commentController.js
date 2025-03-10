@@ -2,37 +2,89 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-exports.addComment = async (req, res) => {
+export const addComment = async (req, res) => {
     try {
         const { content } = req.body;
-        const { articleId } = req.params;
-        const userId = req.user.userId;
+        const articleId = req.params.articleId;
+        const authorId = req.user.userId;
 
         const comment = await prisma.comment.create({
             data: {
                 content,
-                userId,
-                articleId
+                articleId,
+                authorId
             },
+            include: {
+                author: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true
+                    }
+                }
+            }
         });
 
         res.status(201).json(comment);
     } catch (error) {
+        console.error("Error adding comment:", error);
         res.status(500).json({ error: "Failed to add comment" });
     }
 };
 
-exports.getComments = async (req, res) => {
+export const getComments = async (req, res) => {
     try {
-        const { articleId } = req.params;
+        const articleId = req.params.articleId;
+
         const comments = await prisma.comment.findMany({
-            where: { articleId },
-            include: { user: true },
-            orderBy: { createdAt: "desc" }
+            where: {
+                articleId
+            },
+            include: {
+                author: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true
+                    }
+                }
+            },
+            orderBy: {
+                createdAt: 'desc'
+            }
         });
 
         res.json(comments);
     } catch (error) {
+        console.error("Error fetching comments:", error);
         res.status(500).json({ error: "Failed to fetch comments" });
+    }
+};
+
+export const deleteComment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user.userId;
+
+        const comment = await prisma.comment.findUnique({
+            where: { id }
+        });
+
+        if (!comment) {
+            return res.status(404).json({ error: "Comment not found" });
+        }
+
+        if (comment.authorId !== userId) {
+            return res.status(403).json({ error: "Not authorized to delete this comment" });
+        }
+
+        await prisma.comment.delete({
+            where: { id }
+        });
+
+        res.json({ message: "Comment deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting comment:", error);
+        res.status(500).json({ error: "Failed to delete comment" });
     }
 };
