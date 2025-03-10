@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Mail, Lock, LinkedinIcon, Facebook, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { useAuth } from "@/utils/AuthContext";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -11,26 +12,31 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
+    const { login } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
+        setError(null);
 
         try {
-            const response = await fetch("/api/auth/login", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
+                credentials: 'include'
             });
 
             const data = await response.json();
+
             if (response.ok) {
+                login(data.token, data.user);
                 router.push("/dashboard");
             } else {
                 setError(data?.message || "Invalid credentials. Please try again.");
             }
         } catch (error) {
-            console.error("Login 404:", error); // ✅ Log the 404
+            console.error("Login error:", error);
             setError("Something went wrong. Please try again later.");
         } finally {
             setIsLoading(false);
@@ -103,7 +109,7 @@ const Login = () => {
                     </button>
 
                     <p className="text-center text-sm text-gray-600 mt-4">
-                        Don’t have an account?{" "}
+                        Don't have an account?{" "}
                         <Link href="/signup" className="text-indigo-500 hover:underline">
                             Sign Up
                         </Link>

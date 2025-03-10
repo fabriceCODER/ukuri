@@ -1,7 +1,8 @@
-const { PrismaClient } = require("@prisma/client");
-const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+import { PrismaClient } from "@prisma/client";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import router from "../routes/authRoutes.js";
 
 const prisma = new PrismaClient();
 
@@ -9,7 +10,6 @@ const prisma = new PrismaClient();
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const uploadDir = path.join(__dirname, "../public/uploads");
-        // Make sure the upload directory exists
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir, { recursive: true });
         }
@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-exports.createArticle = async (req, res) => {
+export const createArticle = async (req, res) => {
     // Use multer middleware to handle file upload in the route (not here in the controller)
     // Attach the image file to the req object as req.file
 
@@ -48,7 +48,7 @@ exports.createArticle = async (req, res) => {
     }
 };
 
-exports.getArticles = async (req, res) => {
+export const getArticles = async (req, res) => {
     try {
         const articles = await prisma.article.findMany({ include: { author: true } });
         res.json(articles);
@@ -57,7 +57,7 @@ exports.getArticles = async (req, res) => {
     }
 };
 
-exports.getArticleById = async (req, res) => {
+export const getArticleById = async (req, res) => {
     try {
         const article = await prisma.article.findUnique({
             where: { id: req.params.id },
@@ -70,7 +70,7 @@ exports.getArticleById = async (req, res) => {
     }
 };
 
-exports.updateArticle = async (req, res) => {
+export const updateArticle = async (req, res) => {
     try {
         const { title, content, category } = req.body;
         const article = await prisma.article.update({
@@ -84,12 +84,20 @@ exports.updateArticle = async (req, res) => {
     }
 };
 
-exports.deleteArticle = async (req, res) => {
+export const deleteArticle = async (req, res) => {
     try {
         await prisma.article.delete({ where: { id: req.params.id } });
         res.json({ message: "Article deleted" });
     } catch (error) {
         res.status(500).json({ error: "Failed to delete article" });
     }
+};
+
+export default {
+    createArticle,
+    getArticles,
+    getArticleById,
+    updateArticle,
+    deleteArticle
 };
 

@@ -1,5 +1,5 @@
-const app = require("./app");
-const { PrismaClient } = require("@prisma/client");
+import app  from "./app.js"
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 const PORT = process.env.PORT || 5000;

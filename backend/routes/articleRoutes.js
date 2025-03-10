@@ -1,7 +1,7 @@
-const express = require("express");
-const multer = require("multer");
-const { createArticle, getArticles, getArticleById, updateArticle, deleteArticle } = require("../controllers/articleController");
-const authenticate = require("../middlewares/authMiddleware");
+import express from "express";
+import multer from "multer";
+import { createArticle, getArticles, getArticleById, updateArticle, deleteArticle } from "../controllers/articleController";
+import authenticate from "../middlewares/authMiddleware";
 
 const router = express.Router();
 
@@ -27,4 +27,4 @@ router.delete("/:id", authenticate, deleteArticle);
 // Use multer middleware for handling file uploads
 router.post("/articles", upload.single("image"), createArticle);
 
-module.exports = router;
+export default router;
