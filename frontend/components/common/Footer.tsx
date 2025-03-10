@@ -17,7 +17,7 @@ export default function Footer() {
                { label: 'Help Center', href: '/help' },
                { label: 'Terms of Service', href: '/terms' },
                { label: 'Privacy Policy', href: '/privacy' },
-               { label: 'Cookie Policy', href: '/cookies' },
+               { label: 'Cookie Policy', href: '/cookie-policy' },
           ],
           social: [
                { icon: Facebook, href: 'https://facebook.com', label: 'Facebook' },

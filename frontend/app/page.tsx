@@ -12,7 +12,7 @@ const featuredArticles = [
         author: 'John Doe',
         readTime: '5 min read',
         likes: 234,
-        image: '/articles/ai-future.jpg'
+        image: '/images/articles/a.jpg'
     },
     {
         id: 2,

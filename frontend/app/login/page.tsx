@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Mail, Lock, LinkedinIcon, Facebook, Loader2, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
@@ -13,6 +13,7 @@ const Login = () => {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
     const { login } = useAuth();
+    const searchParams = useSearchParams();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -21,9 +22,10 @@ const Login = () => {
 
         try {
             await login(email, password);
-            router.push("/dashboard");
+            const from = searchParams.get('from') || '/dashboard';
+            router.push(from);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Failed to login");
+            setError(err instanceof Error ? err.message : "Login failed");
         } finally {
             setIsLoading(false);
         }
@@ -44,15 +46,15 @@ const Login = () => {
                     />
                 </Link>
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                    Welcome back
+                    Sign in to your account
                 </h2>
                 <p className="mt-2 text-center text-sm text-gray-600">
-                    Don't have an account?{" "}
+                    Or{" "}
                     <Link
                         href="/register"
                         className="font-medium text-indigo-600 hover:text-indigo-500"
                     >
-                        Sign up
+                        create a new account
                     </Link>
                 </p>
             </motion.div>
@@ -65,11 +67,15 @@ const Login = () => {
                     className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10"
                 >
                     {error && (
-                        <div className="mb-4 bg-red-50 border border-red-200 rounded-md p-4">
+                        <div className="rounded-md bg-red-50 p-4">
                             <div className="flex">
-                                <AlertCircle className="h-5 w-5 text-red-400" />
+                                <div className="flex-shrink-0">
+                                    <AlertCircle className="h-5 w-5 text-red-400" />
+                                </div>
                                 <div className="ml-3">
-                                    <p className="text-sm text-red-700">{error}</p>
+                                    <h3 className="text-sm font-medium text-red-800">
+                                        {error}
+                                    </h3>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +89,10 @@ const Login = () => {
                             >
                                 Email address
                             </label>
-                            <div className="mt-1">
+                            <div className="mt-1 relative rounded-md shadow-sm">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <Mail className="h-5 w-5 text-gray-400" />
+                                </div>
                                 <input
                                     id="email"
                                     name="email"
@@ -92,7 +101,8 @@ const Login = () => {
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                                    placeholder="you@example.com"
                                 />
                             </div>
                         </div>
