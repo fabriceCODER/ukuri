@@ -1,48 +1,61 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Shield, Lock, Eye, Database, Key, Trash2, Download, Settings } from 'lucide-react';
+import { Shield, Lock, Eye, Database, Key, Trash2, Download, Settings, ExternalLink } from 'lucide-react';
+import { Mail } from 'lucide-react';
 
 export default function PrivacyPage() {
     const sections = [
         {
             title: 'Information We Collect',
             icon: Database,
+            description: 'Understanding what information we collect and how we use it',
             content: [
                 'Personal information provided during registration',
                 'Usage data and analytics',
                 'Content you create and share',
-                'Communication data',
+                'Communication data and preferences',
+                'Device and browser information',
+                'Location data (with your consent)',
             ]
         },
         {
             title: 'How We Use Your Data',
             icon: Settings,
+            description: 'Transparent information about data usage and processing',
             content: [
                 'To provide and improve our services',
                 'To personalize your experience',
-                'To communicate with you',
+                'To communicate with you about updates',
                 'For security and fraud prevention',
+                'To analyze and improve our platform',
+                'To comply with legal obligations',
             ]
         },
         {
             title: 'Data Protection',
             icon: Shield,
+            description: 'Our commitment to keeping your data safe and secure',
             content: [
                 'Industry-standard security measures',
-                'Regular security audits',
-                'Encrypted data transmission',
-                'Secure data storage',
+                'Regular security audits and updates',
+                'Encrypted data transmission (SSL/TLS)',
+                'Secure data storage with encryption',
+                'Access controls and authentication',
+                'Regular backup procedures',
             ]
         },
         {
             title: 'Your Rights',
             icon: Key,
+            description: 'Understanding and exercising your data privacy rights',
             content: [
-                'Access your personal data',
-                'Request data correction',
-                'Delete your account',
-                'Export your data',
+                'Access your personal data anytime',
+                'Request data correction or updates',
+                'Delete your account and data',
+                'Export your data in common formats',
+                'Opt-out of data processing',
+                'Withdraw consent at any time',
             ]
         }
     ];
@@ -51,22 +64,22 @@ export default function PrivacyPage() {
         {
             icon: Lock,
             title: 'Secure Storage',
-            description: 'Your data is encrypted and stored securely'
+            description: 'Your data is encrypted and stored securely using industry-standard protocols'
         },
         {
             icon: Eye,
             title: 'Transparency',
-            description: 'Clear information about how we use your data'
+            description: 'Clear and detailed information about how we collect and use your data'
         },
         {
             icon: Trash2,
             title: 'Data Control',
-            description: 'Delete your data at any time'
+            description: 'Full control over your data with easy deletion and export options'
         },
         {
             icon: Download,
             title: 'Data Portability',
-            description: 'Export your data when needed'
+            description: 'Export your data in standard formats whenever you need'
         }
     ];
 
@@ -145,15 +158,18 @@ export default function PrivacyPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 * index }}
-                            className="bg-white rounded-xl shadow-sm p-8"
+                            className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 p-8"
                         >
                             <div className="flex items-center mb-6">
                                 <div className="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-100 mr-4">
                                     <section.icon className="h-6 w-6 text-indigo-600" />
                                 </div>
-                                <h2 className="text-2xl font-semibold text-gray-900">{section.title}</h2>
+                                <div>
+                                    <h2 className="text-2xl font-semibold text-gray-900">{section.title}</h2>
+                                    <p className="text-gray-600 mt-1">{section.description}</p>
+                                </div>
                             </div>
-                            <ul className="space-y-4">
+                            <ul className="space-y-4 ml-4">
                                 {section.content.map((item, itemIndex) => (
                                     <li key={itemIndex} className="flex items-start">
                                         <span className="flex-shrink-0 h-2 w-2 mt-2 rounded-full bg-indigo-500 mr-3" />
@@ -170,17 +186,36 @@ export default function PrivacyPage() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="text-center mt-12"
+                    className="mt-16 bg-white rounded-xl shadow-sm p-8 text-center"
                 >
-                    <p className="text-gray-600">
-                        For privacy-related inquiries, please contact us at{' '}
-                        <a href="mailto:privacy@ukurikose.com" className="text-indigo-600 hover:text-indigo-500">
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-4">Have Questions?</h3>
+                    <p className="text-gray-600 mb-6">
+                        For privacy-related inquiries or to exercise your data rights, please contact our Data Protection Officer
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <a
+                            href="mailto:privacy@ukurikose.com"
+                            className="inline-flex items-center px-6 py-3 rounded-lg text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200"
+                        >
+                            <Mail className="h-5 w-5 mr-2" />
                             privacy@ukurikose.com
                         </a>
-                    </p>
-                    <p className="text-sm text-gray-500 mt-4">
-                        Last updated: {new Date().toLocaleDateString()}
-                    </p>
+                        <a
+                            href="/contact"
+                            className="inline-flex items-center px-6 py-3 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200"
+                        >
+                            <ExternalLink className="h-5 w-5 mr-2" />
+                            Contact Form
+                        </a>
+                    </div>
+                    <div className="mt-8 pt-8 border-t border-gray-200">
+                        <p className="text-sm text-gray-500">
+                            Last updated: {new Date().toLocaleDateString()}
+                        </p>
+                        <p className="text-sm text-gray-500 mt-2">
+                            This privacy policy is effective as of February 15, 2024
+                        </p>
+                    </div>
                 </motion.div>
             </div>
         </div>
