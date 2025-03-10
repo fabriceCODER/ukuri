@@ -1,19 +1,15 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
-import { AuthProvider } from '@/utils/AuthContext';
-import ClientLayout from '@/components/ClientLayout';
-import Header from '@/components/common/Header';
+import { AuthProvider } from '@/contexts/AuthContext';
+import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'UkuriKose - Professional Content Platform',
-  description: 'A professional platform for creating and sharing high-quality content',
-  keywords: 'content platform, articles, professional writing, knowledge sharing',
-  authors: [{ name: 'UkuriKose Team' }],
-  viewport: 'width=device-width, initial-scale=1',
+  title: 'UkuriKose - Your Trusted Source for News and Articles',
+  description: 'Stay informed with the latest news and articles from UkuriKose.',
 };
 
 export default function RootLayout({
@@ -22,18 +18,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full bg-gray-50">
-      <body className={`${inter.className} h-full`}>
+    <html lang="en">
+      <body className={inter.className}>
         <AuthProvider>
-          <ClientLayout>
-            <div className="flex flex-col min-h-screen">
-              <Header />
-              <main className="flex-grow">
-                {children}
-              </main>
-              <Footer />
-            </div>
-          </ClientLayout>
+          <div className="min-h-screen flex flex-col">
+            <Navbar />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </div>
         </AuthProvider>
       </body>
     </html>
