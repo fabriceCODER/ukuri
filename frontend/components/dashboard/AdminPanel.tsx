@@ -1,95 +1,151 @@
 "use client";
 
-import { FaUsers, FaNewspaper, FaCogs, FaChartBar } from "react-icons/fa";
-import Link from "next/link";
+import { motion } from 'framer-motion';
+import { FileText, Users, AlertTriangle, CheckCircle } from 'lucide-react';
+import StatsWidget from './StatsWidget';
 
-const AdminPanel = () => {
+export default function AdminPanel() {
+    const stats = [
+        {
+            title: 'Total Articles',
+            value: 256,
+            change: 12,
+            trend: 'up' as const,
+            icon: <FileText className="h-6 w-6" />,
+        },
+        {
+            title: 'Active Users',
+            value: 1458,
+            change: 8,
+            trend: 'up' as const,
+            icon: <Users className="h-6 w-6" />,
+        },
+        {
+            title: 'Pending Reviews',
+            value: 23,
+            change: -5,
+            trend: 'down' as const,
+            icon: <AlertTriangle className="h-6 w-6" />,
+        },
+        {
+            title: 'Approved Articles',
+            value: 189,
+            change: 15,
+            trend: 'up' as const,
+            icon: <CheckCircle className="h-6 w-6" />,
+        },
+    ];
+
+    const recentArticles = [
+        { id: 1, title: 'The Future of AI', author: 'John Doe', status: 'pending' },
+        { id: 2, title: 'Climate Change Effects', author: 'Jane Smith', status: 'approved' },
+        { id: 3, title: 'Space Exploration', author: 'Mike Johnson', status: 'pending' },
+    ];
+
     return (
-        <div className="bg-white p-8 shadow-md rounded-lg">
-            {/* Header Section */}
-            <div className="flex flex-col md:flex-row items-center justify-between mb-6">
-                <div className="text-center md:text-left mb-4 md:mb-0">
-                    <h2 className="text-3xl font-bold text-gray-900">Admin Dashboard</h2>
-                    <p className="text-lg text-gray-600 mt-1">
-                        Manage users, articles, and platform settings efficiently.
-                    </p>
-                </div>
-                <Link href="/admin/settings">
-                    <button className="flex items-center gap-2 px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-100 transition">
-                        <FaCogs className="text-gray-500" />
-                        <span>Settings</span>
-                    </button>
-                </Link>
+        <div className="space-y-6">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {stats.map((stat) => (
+                    <StatsWidget
+                        key={stat.title}
+                        title={stat.title}
+                        value={stat.value}
+                        change={stat.change}
+                        trend={stat.trend}
+                        icon={stat.icon}
+                    />
+                ))}
             </div>
 
-            {/* Admin Panel Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* Recent Articles */}
-                <div className="bg-gray-100 p-6 rounded-lg shadow-sm hover:shadow-md transition">
-                    <div className="flex items-center gap-4">
-                        <FaNewspaper className="text-blue-500 text-4xl" />
-                        <div>
-                            <h3 className="text-xl font-semibold">Recent Articles</h3>
-                            <p className="text-sm text-gray-600">Review and manage news articles.</p>
-                        </div>
+            {/* Recent Articles */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-lg shadow-sm border border-gray-200"
+            >
+                <div className="p-6">
+                    <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Articles</h2>
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Title
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Author
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Status
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {recentArticles.map((article) => (
+                                    <tr key={article.id}>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            {article.title}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {article.author}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <span
+                                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${article.status === 'approved'
+                                                        ? 'bg-green-100 text-green-800'
+                                                        : 'bg-yellow-100 text-yellow-800'
+                                                    }`}
+                                            >
+                                                {article.status}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <button className="text-indigo-600 hover:text-indigo-900">Review</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
-                    <Link href="/admin/articles">
-                        <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition">
-                            Manage Articles
-                        </button>
-                    </Link>
                 </div>
+            </motion.div>
 
-                {/* User Management */}
-                <div className="bg-gray-100 p-6 rounded-lg shadow-sm hover:shadow-md transition">
-                    <div className="flex items-center gap-4">
-                        <FaUsers className="text-green-500 text-4xl" />
-                        <div>
-                            <h3 className="text-xl font-semibold">User Management</h3>
-                            <p className="text-sm text-gray-600">Manage registered users and roles.</p>
-                        </div>
-                    </div>
-                    <Link href="/admin/users">
-                        <button className="mt-4 w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-500 transition">
+            {/* Quick Actions */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+                    <div className="space-y-2">
+                        <button className="w-full bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition">
+                            Review Pending Articles
+                        </button>
+                        <button className="w-full bg-white text-indigo-600 border border-indigo-600 px-4 py-2 rounded-md hover:bg-indigo-50 transition">
                             Manage Users
                         </button>
-                    </Link>
+                    </div>
                 </div>
 
-                {/* Site Analytics */}
-                <div className="bg-gray-100 p-6 rounded-lg shadow-sm hover:shadow-md transition">
-                    <div className="flex items-center gap-4">
-                        <FaChartBar className="text-purple-500 text-4xl" />
-                        <div>
-                            <h3 className="text-xl font-semibold">Site Analytics</h3>
-                            <p className="text-sm text-gray-600">Track website performance.</p>
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 className="text-lg font-semibold text-gray-900 mb-4">System Status</h2>
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                            <span className="text-sm text-gray-600">Server Status</span>
+                            <span className="text-sm font-medium text-green-600">Operational</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <span className="text-sm text-gray-600">Last Backup</span>
+                            <span className="text-sm font-medium text-gray-900">2 hours ago</span>
                         </div>
                     </div>
-                    <Link href="/admin/analytics">
-                        <button className="mt-4 w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-500 transition">
-                            View Analytics
-                        </button>
-                    </Link>
                 </div>
-
-                {/* System Settings */}
-                <div className="bg-gray-100 p-6 rounded-lg shadow-sm hover:shadow-md transition">
-                    <div className="flex items-center gap-4">
-                        <FaCogs className="text-orange-500 text-4xl" />
-                        <div>
-                            <h3 className="text-xl font-semibold">System Settings</h3>
-                            <p className="text-sm text-gray-600">Configure platform settings.</p>
-                        </div>
-                    </div>
-                    <Link href="/admin/settings">
-                        <button className="mt-4 w-full bg-orange-600 text-white py-2 rounded-md hover:bg-orange-500 transition">
-                            Configure Settings
-                        </button>
-                    </Link>
-                </div>
-            </div>
+            </motion.div>
         </div>
     );
-};
-
-export default AdminPanel;
+}
