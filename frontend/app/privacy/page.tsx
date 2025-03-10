@@ -125,7 +125,7 @@ export default function PrivacyPage() {
             </motion.div>
 
             {/* Features Grid */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -150,7 +150,7 @@ export default function PrivacyPage() {
             </div>
 
             {/* Privacy Sections */}
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
                 <div className="space-y-8">
                     {sections.map((section, index) => (
                         <motion.div
