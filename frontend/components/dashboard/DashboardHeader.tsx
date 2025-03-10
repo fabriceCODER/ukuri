@@ -6,9 +6,10 @@ import { useState } from 'react';
 
 interface DashboardHeaderProps {
     onMenuClick?: () => void;
+    title?: string;
 }
 
-export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
+export default function DashboardHeader({ onMenuClick, title }: DashboardHeaderProps) {
     const { user } = useAuth();
     const [notifications] = useState([
         { id: 1, text: 'New comment on your article' },
@@ -26,6 +27,10 @@ export default function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
                         >
                             <Menu className="h-6 w-6" />
                         </button>
+
+                        {title && (
+                            <h1 className="text-xl font-semibold text-gray-900 ml-4">{title}</h1>
+                        )}
 
                         {/* Search Bar */}
                         <div className="hidden md:flex items-center ml-4">

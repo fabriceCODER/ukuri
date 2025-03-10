@@ -80,7 +80,12 @@ export const api = {
      articles: {
           getAll: async (token: string) => {
                try {
-                    return await request('/api/articles', { token });
+                    const response = await fetch(`${API_URL}/articles`, {
+                         headers: {
+                              Authorization: `Bearer ${token}`,
+                         },
+                    });
+                    return handleResponse(response);
                } catch (error) {
                     console.error('Get articles error:', error);
                     throw error;
@@ -88,7 +93,12 @@ export const api = {
           },
           getOne: async (id: string, token: string) => {
                try {
-                    return await request(`/api/articles/${id}`, { token });
+                    const response = await fetch(`${API_URL}/articles/${id}`, {
+                         headers: {
+                              Authorization: `Bearer ${token}`,
+                         },
+                    });
+                    return handleResponse(response);
                } catch (error) {
                     console.error('Get article error:', error);
                     throw error;
@@ -96,11 +106,15 @@ export const api = {
           },
           create: async (data: any, token: string) => {
                try {
-                    return await request('/api/articles', {
+                    const response = await fetch(`${API_URL}/articles`, {
                          method: 'POST',
+                         headers: {
+                              'Content-Type': 'application/json',
+                              Authorization: `Bearer ${token}`,
+                         },
                          body: JSON.stringify(data),
-                         token,
                     });
+                    return handleResponse(response);
                } catch (error) {
                     console.error('Create article error:', error);
                     throw error;
@@ -108,11 +122,15 @@ export const api = {
           },
           update: async (id: string, data: any, token: string) => {
                try {
-                    return await request(`/api/articles/${id}`, {
+                    const response = await fetch(`${API_URL}/articles/${id}`, {
                          method: 'PUT',
+                         headers: {
+                              'Content-Type': 'application/json',
+                              Authorization: `Bearer ${token}`,
+                         },
                          body: JSON.stringify(data),
-                         token,
                     });
+                    return handleResponse(response);
                } catch (error) {
                     console.error('Update article error:', error);
                     throw error;
@@ -120,12 +138,28 @@ export const api = {
           },
           delete: async (id: string, token: string) => {
                try {
-                    return await request(`/api/articles/${id}`, {
+                    const response = await fetch(`${API_URL}/articles/${id}`, {
                          method: 'DELETE',
-                         token,
+                         headers: {
+                              Authorization: `Bearer ${token}`,
+                         },
                     });
+                    return handleResponse(response);
                } catch (error) {
                     console.error('Delete article error:', error);
+                    throw error;
+               }
+          },
+          getStats: async (token: string) => {
+               try {
+                    const response = await fetch(`${API_URL}/articles/stats`, {
+                         headers: {
+                              Authorization: `Bearer ${token}`,
+                         },
+                    });
+                    return handleResponse(response);
+               } catch (error) {
+                    console.error('Get article stats error:', error);
                     throw error;
                }
           },

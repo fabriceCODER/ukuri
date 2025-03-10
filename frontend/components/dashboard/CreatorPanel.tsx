@@ -1,85 +1,191 @@
 "use client";
 
-import { FaPlus, FaFileAlt, FaChartLine, FaCogs } from "react-icons/fa";
-import Link from "next/link";
+import { motion } from 'framer-motion';
+import { FileText, MessageSquare, Eye, ThumbsUp, PenTool } from 'lucide-react';
+import Link from 'next/link';
+import StatsWidget from './StatsWidget';
 
-const CreatorPanel = () => {
+export default function CreatorPanel() {
+    const stats = [
+        {
+            title: 'Published Articles',
+            value: 24,
+            change: 8,
+            trend: 'up' as const,
+            icon: <FileText className="h-6 w-6" />,
+        },
+        {
+            title: 'Total Comments',
+            value: 156,
+            change: 12,
+            trend: 'up' as const,
+            icon: <MessageSquare className="h-6 w-6" />,
+        },
+        {
+            title: 'Total Views',
+            value: 12543,
+            change: 15,
+            trend: 'up' as const,
+            icon: <Eye className="h-6 w-6" />,
+        },
+        {
+            title: 'Total Likes',
+            value: 843,
+            change: 5,
+            trend: 'up' as const,
+            icon: <ThumbsUp className="h-6 w-6" />,
+        },
+    ];
+
+    const recentArticles = [
+        { id: 1, title: 'The Rise of AI in Healthcare', status: 'published', views: 1234, likes: 89 },
+        { id: 2, title: 'Sustainable Energy Solutions', status: 'draft', views: 0, likes: 0 },
+        { id: 3, title: 'Future of Remote Work', status: 'published', views: 567, likes: 45 },
+    ];
+
     return (
-        <div className="bg-white p-8 shadow-md rounded-lg">
-            {/* Header Section */}
-            <div className="flex flex-col md:flex-row items-center justify-between mb-6">
-                <div className="text-center md:text-left mb-4 md:mb-0">
-                    <h2 className="text-3xl font-bold text-gray-900">Creator Dashboard</h2>
-                    <p className="text-lg text-gray-600 mt-1">
-                        Manage your articles, track performance, and customize settings.
-                    </p>
-                </div>
-                <Link href="/creator/settings">
-                    <button className="flex items-center gap-2 px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-100 transition">
-                        <FaCogs className="text-gray-500" />
-                        <span>Settings</span>
-                    </button>
-                </Link>
+        <div className="space-y-6">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {stats.map((stat) => (
+                    <StatsWidget
+                        key={stat.title}
+                        title={stat.title}
+                        value={stat.value}
+                        change={stat.change}
+                        trend={stat.trend}
+                        icon={stat.icon}
+                    />
+                ))}
             </div>
 
-            {/* Creator Panel Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Create New Article */}
-                <div className="bg-gray-100 p-6 rounded-lg shadow-sm hover:shadow-md transition">
-                    <div className="flex items-center gap-4">
-                        <FaPlus className="text-blue-500 text-4xl" />
-                        <div>
-                            <h3 className="text-xl font-semibold">Create New Article</h3>
-                            <p className="text-sm text-gray-600">
-                                Write and publish articles for your audience.
-                            </p>
-                        </div>
-                    </div>
-                    <Link href="/submit">
-                        <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-500 transition">
-                            Start Writing
-                        </button>
+            {/* Quick Actions */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
+            >
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-lg font-semibold text-gray-900">Quick Actions</h2>
+                    <Link
+                        href="/dashboard/articles/new"
+                        className="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition"
+                    >
+                        <PenTool className="h-5 w-5 mr-2" />
+                        Write New Article
                     </Link>
+                </div>
+            </motion.div>
+
+            {/* Recent Articles */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-lg shadow-sm border border-gray-200"
+            >
+                <div className="p-6">
+                    <h2 className="text-lg font-semibold text-gray-900 mb-4">Your Recent Articles</h2>
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Title
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Status
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Views
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Likes
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {recentArticles.map((article) => (
+                                    <tr key={article.id}>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            {article.title}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <span
+                                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${article.status === 'published'
+                                                        ? 'bg-green-100 text-green-800'
+                                                        : 'bg-yellow-100 text-yellow-800'
+                                                    }`}
+                                            >
+                                                {article.status}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {article.views.toLocaleString()}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {article.likes.toLocaleString()}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <Link
+                                                href={`/dashboard/articles/${article.id}`}
+                                                className="text-indigo-600 hover:text-indigo-900"
+                                            >
+                                                Edit
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </motion.div>
+
+            {/* Content Ideas */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 className="text-lg font-semibold text-gray-900 mb-4">Content Ideas</h2>
+                    <ul className="space-y-3">
+                        <li className="flex items-center text-sm text-gray-600">
+                            <span className="w-2 h-2 bg-indigo-600 rounded-full mr-2"></span>
+                            Write about emerging technology trends
+                        </li>
+                        <li className="flex items-center text-sm text-gray-600">
+                            <span className="w-2 h-2 bg-indigo-600 rounded-full mr-2"></span>
+                            Cover recent scientific discoveries
+                        </li>
+                        <li className="flex items-center text-sm text-gray-600">
+                            <span className="w-2 h-2 bg-indigo-600 rounded-full mr-2"></span>
+                            Analyze current market trends
+                        </li>
+                    </ul>
                 </div>
 
-                {/* My Articles */}
-                <div className="bg-gray-100 p-6 rounded-lg shadow-sm hover:shadow-md transition">
-                    <div className="flex items-center gap-4">
-                        <FaFileAlt className="text-green-500 text-4xl" />
-                        <div>
-                            <h3 className="text-xl font-semibold">My Articles</h3>
-                            <p className="text-sm text-gray-600">
-                                View and manage all your published articles.
-                            </p>
-                        </div>
-                    </div>
-                    <Link href="/creator/articles">
-                        <button className="mt-4 w-full bg-green-600 text-white py-2 px-1.5 rounded-md hover:bg-green-500 transition">
-                            Manage Articles
-                        </button>
-                    </Link>
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 className="text-lg font-semibold text-gray-900 mb-4">Writing Tips</h2>
+                    <ul className="space-y-3">
+                        <li className="flex items-center text-sm text-gray-600">
+                            <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
+                            Use engaging headlines
+                        </li>
+                        <li className="flex items-center text-sm text-gray-600">
+                            <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
+                            Include relevant statistics
+                        </li>
+                        <li className="flex items-center text-sm text-gray-600">
+                            <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
+                            Add compelling visuals
+                        </li>
+                    </ul>
                 </div>
-
-                {/* Article Performance */}
-                <div className="bg-gray-100 p-6 rounded-lg shadow-sm hover:shadow-md transition">
-                    <div className="flex items-center gap-4">
-                        <FaChartLine className="text-purple-500 text-4xl" />
-                        <div>
-                            <h3 className="text-xl font-semibold">Article Performance</h3>
-                            <p className="text-sm text-gray-600">
-                                Track how your articles are performing.
-                            </p>
-                        </div>
-                    </div>
-                    <Link href="/creator/analytics">
-                        <button className="mt-4 w-full bg-purple-600 text-white py-2 rounded-md hover:bg-purple-500 transition">
-                            View Insights
-                        </button>
-                    </Link>
-                </div>
-            </div>
+            </motion.div>
         </div>
     );
-};
-
-export default CreatorPanel;
+}
