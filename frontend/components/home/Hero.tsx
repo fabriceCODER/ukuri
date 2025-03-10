@@ -1,65 +1,119 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import { FaNewspaper, FaGlobe, FaUsers } from "react-icons/fa";
+import { motion } from 'framer-motion';
+import { ArrowRight, BookOpen, Users, Globe, Target } from 'lucide-react';
 
-const Hero = () => {
+const features = [
+    {
+        icon: BookOpen,
+        title: 'Quality Content',
+        description: 'Access well-researched and professionally written articles'
+    },
+    {
+        icon: Users,
+        title: 'Expert Writers',
+        description: 'Learn from industry professionals and thought leaders'
+    },
+    {
+        icon: Globe,
+        title: 'Global Reach',
+        description: 'Connect with a worldwide community of readers and writers'
+    },
+    {
+        icon: Target,
+        title: 'Focused Topics',
+        description: 'Find content tailored to your interests and needs'
+    }
+];
+
+export default function Hero() {
     return (
-        <section className="w-full h-[80vh] my-28 flex flex-col md:flex-row items-center justify-between text-gray-900 px-6 md:px-12">
-            {/* Hero Content */}
-            <div className="text-center md:text-left max-w-3xl">
-                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
-                    Stay Informed, Stay Ahead
-                </h1>
-                <p className="mt-4 text-lg md:text-xl text-gray-600">
-                    Get the latest news from around the world, covering all domains.
-                </p>
+        <div className="relative bg-gradient-to-r from-indigo-600 to-indigo-800 overflow-hidden">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 overflow-hidden">
+                <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+            </div>
 
-                {/* CTA Buttons */}
-                <div className="mt-6 flex flex-col md:flex-row items-center md:items-start gap-4">
-                    <Link href="/articles">
-                        <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition shadow-md">
+            {/* Main Content */}
+            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
+                <div className="text-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="flex justify-center mb-6"
+                    >
+                        <div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-500/10 text-indigo-200">
+                            <span className="text-sm font-medium">Welcome to UkuriKose</span>
+                        </div>
+                    </motion.div>
+
+                    <motion.h1
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                        className="text-4xl font-extrabold text-white sm:text-5xl lg:text-6xl"
+                    >
+                        Discover Knowledge, Share Wisdom
+                    </motion.h1>
+
+                    <motion.p
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                        className="mt-6 text-xl text-indigo-100 max-w-3xl mx-auto"
+                    >
+                        Join our community of writers and readers to explore, learn, and share insights on topics that matter.
+                    </motion.p>
+
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                        className="mt-10 flex flex-col sm:flex-row gap-4 justify-center"
+                    >
+                        <a
+                            href="/articles"
+                            className="inline-flex items-center px-6 py-3 rounded-lg text-white bg-indigo-500 hover:bg-indigo-600 transition-colors duration-200"
+                        >
                             Explore Articles
-                        </button>
-                    </Link>
-                    <Link href="/submit">
-                        <button className="px-6 py-3 border border-gray-400 text-gray-900 rounded-lg hover:bg-gray-100 transition shadow-md">
-                            Submit News
-                        </button>
-                    </Link>
+                            <ArrowRight className="ml-2 h-5 w-5" />
+                        </a>
+                        <a
+                            href="/register"
+                            className="inline-flex items-center px-6 py-3 rounded-lg text-indigo-600 bg-white hover:bg-indigo-50 transition-colors duration-200"
+                        >
+                            Get Started
+                        </a>
+                    </motion.div>
                 </div>
 
-                {/* Feature Icons */}
-                <div className="mt-8 flex justify-center md:justify-start gap-10 text-gray-700">
-                    <div className="flex flex-col items-center">
-                        <FaNewspaper size={40} className="text-blue-500" />
-                        <p className="mt-2 text-sm">Latest News</p>
-                    </div>
-                    <div className="flex flex-col items-center">
-                        <FaGlobe size={40} className="text-green-500" />
-                        <p className="mt-2 text-sm">Global Coverage</p>
-                    </div>
-                    <div className="flex flex-col items-center">
-                        <FaUsers size={40} className="text-orange-500" />
-                        <p className="mt-2 text-sm">Community Reporting</p>
-                    </div>
-                </div>
+                {/* Features Grid */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                    className="mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+                >
+                    {features.map((feature, index) => (
+                        <motion.div
+                            key={feature.title}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
+                            className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center"
+                        >
+                            <div className="flex justify-center mb-4">
+                                <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                                    <feature.icon className="h-6 w-6 text-white" />
+                                </div>
+                            </div>
+                            <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>
+                            <p className="text-indigo-100 text-sm">{feature.description}</p>
+                        </motion.div>
+                    ))}
+                </motion.div>
             </div>
-
-            {/* Home Image (Moved to the right side) */}
-            <div className="mt-12 md:mt-0 md:w-1/2 flex justify-center">
-                <Image
-                    src="/images/illustraton.jpg"
-                    alt="News Illustration"
-                    width={400}
-                    height={500}
-                    priority
-                    className="max-w-full h-auto"
-                />
-            </div>
-        </section>
+        </div>
     );
-};
-
-export default Hero;
+}
