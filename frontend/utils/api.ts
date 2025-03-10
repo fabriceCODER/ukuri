@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
 interface ApiResponse<T> {
      data?: T;
@@ -21,17 +21,19 @@ export async function apiRequest<T>(
           const response = await fetch(`${API_URL}${endpoint}`, {
                ...options,
                headers,
+               credentials: 'include',
+               mode: 'cors',
           });
 
-          const data = await response.json();
-
           if (!response.ok) {
+               const errorData = await response.json().catch(() => ({}));
                return {
-                    error: data.message || 'An error occurred',
+                    error: errorData.message || `HTTP error! status: ${response.status}`,
                     status: response.status,
                };
           }
 
+          const data = await response.json();
           return {
                data,
                status: response.status,
@@ -39,7 +41,7 @@ export async function apiRequest<T>(
      } catch (error) {
           console.error('API request failed:', error);
           return {
-               error: 'Failed to connect to the server',
+               error: error instanceof Error ? error.message : 'Failed to connect to the server',
                status: 500,
           };
      }
