@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
+import { api } from '@/utils/api';
 
 interface User {
      id: string;
@@ -38,17 +39,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     return;
                }
 
-               const response = await fetch('http://localhost:3001/api/auth/me', {
-                    headers: {
-                         Authorization: `Bearer ${token}`,
-                    },
-               });
-
-               if (response.ok) {
-                    const userData = await response.json();
-                    setUser(userData);
-               } else {
+               const { data, error } = await api.auth.me();
+               if (error) {
                     localStorage.removeItem('token');
+               } else if (data) {
+                    setUser(data);
                }
           } catch (error) {
                console.error('Auth check failed:', error);
@@ -60,23 +55,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
      const login = async (email: string, password: string) => {
           try {
-               const response = await fetch('http://localhost:3001/api/auth/login', {
-                    method: 'POST',
-                    headers: {
-                         'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email, password }),
-               });
-
-               if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.message || 'Login failed');
+               const { data, error } = await api.auth.login(email, password);
+               if (error) {
+                    throw new Error(error);
                }
-
-               const data = await response.json();
-               localStorage.setItem('token', data.token);
-               setUser(data.user);
-               router.push('/dashboard');
+               if (data) {
+                    localStorage.setItem('token', data.token);
+                    setUser(data.user);
+                    router.push('/dashboard');
+               }
           } catch (error) {
                console.error('Login failed:', error);
                throw error;
@@ -85,23 +72,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
      const register = async (name: string, email: string, password: string) => {
           try {
-               const response = await fetch('http://localhost:3001/api/auth/register', {
-                    method: 'POST',
-                    headers: {
-                         'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ name, email, password }),
-               });
-
-               if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.message || 'Registration failed');
+               const { data, error } = await api.auth.register(name, email, password);
+               if (error) {
+                    throw new Error(error);
                }
-
-               const data = await response.json();
-               localStorage.setItem('token', data.token);
-               setUser(data.user);
-               router.push('/dashboard');
+               if (data) {
+                    localStorage.setItem('token', data.token);
+                    setUser(data.user);
+                    router.push('/dashboard');
+               }
           } catch (error) {
                console.error('Registration failed:', error);
                throw error;
@@ -112,12 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           try {
                const token = localStorage.getItem('token');
                if (token) {
-                    await fetch('http://localhost:3001/api/auth/logout', {
-                         method: 'POST',
-                         headers: {
-                              Authorization: `Bearer ${token}`,
-                         },
-                    });
+                    await api.auth.logout();
                }
           } catch (error) {
                console.error('Logout failed:', error);

@@ -1,13 +1,17 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
-interface RequestOptions extends RequestInit {
-     token?: string;
+interface ApiResponse<T> {
+     data?: T;
+     error?: string;
+     status: number;
 }
 
-async function request(endpoint: string, options: RequestOptions = {}) {
+export async function apiRequest<T>(
+     endpoint: string,
+     options: RequestInit = {}
+): Promise<ApiResponse<T>> {
      try {
-          const { token, ...rest } = options;
-
+          const token = localStorage.getItem('token');
           const headers = {
                'Content-Type': 'application/json',
                ...(token && { Authorization: `Bearer ${token}` }),
@@ -15,67 +19,49 @@ async function request(endpoint: string, options: RequestOptions = {}) {
           };
 
           const response = await fetch(`${API_URL}${endpoint}`, {
-               ...rest,
+               ...options,
                headers,
-               credentials: 'include',
           });
 
+          const data = await response.json();
+
           if (!response.ok) {
-               try {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'API request failed');
-               } catch (jsonError) {
-                    throw new Error(`Request failed with status ${response.status}`);
-               }
+               return {
+                    error: data.message || 'An error occurred',
+                    status: response.status,
+               };
           }
 
-          try {
-               return await response.json();
-          } catch (jsonError) {
-               console.error('Error parsing JSON response:', jsonError);
-               throw new Error('Invalid response format from server');
-          }
+          return {
+               data,
+               status: response.status,
+          };
      } catch (error) {
-          console.error('API request error:', error);
-          if (error instanceof Error) {
-               throw error;
-          }
-          throw new Error('An unexpected error occurred');
+          console.error('API request failed:', error);
+          return {
+               error: 'Failed to connect to the server',
+               status: 500,
+          };
      }
 }
 
 export const api = {
      auth: {
-          login: async (email: string, password: string) => {
-               try {
-                    return await request('/api/auth/login', {
-                         method: 'POST',
-                         body: JSON.stringify({ email, password }),
-                    });
-               } catch (error) {
-                    console.error('Login error:', error);
-                    throw error;
-               }
-          },
-          register: async (name: string, email: string, password: string) => {
-               try {
-                    return await request('/api/auth/register', {
-                         method: 'POST',
-                         body: JSON.stringify({ name, email, password }),
-                    });
-               } catch (error) {
-                    console.error('Registration error:', error);
-                    throw error;
-               }
-          },
-          getProfile: async (token: string) => {
-               try {
-                    return await request('/api/auth/profile', { token });
-               } catch (error) {
-                    console.error('Get profile error:', error);
-                    throw error;
-               }
-          },
+          me: () => apiRequest('/api/auth/me'),
+          login: (email: string, password: string) =>
+               apiRequest('/api/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password }),
+               }),
+          register: (name: string, email: string, password: string) =>
+               apiRequest('/api/auth/register', {
+                    method: 'POST',
+                    body: JSON.stringify({ name, email, password }),
+               }),
+          logout: () =>
+               apiRequest('/api/auth/logout', {
+                    method: 'POST',
+               }),
      },
      articles: {
           getAll: async (token: string) => {
