@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { FaPlus, FaMinus } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import { HelpCircle, ChevronDown, ChevronUp, Search } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 
 const faqData = [
@@ -29,49 +29,123 @@ const faqData = [
 ];
 
 const FAQPage = () => {
+    const [searchTerm, setSearchTerm] = useState('');
     const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-    const toggleFAQ = (index: number) => {
-        setOpenIndex(openIndex === index ? null : index);
-    };
+    const filteredFaqs = faqData.filter(faq =>
+        faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
-        <section className="w-fit mx-auto my-28 px-6">
-            <Navbar/>
-            <h1 className="text-4xl font-bold text-center text-gray-900">Frequently Asked Questions</h1>
-            <p className="text-lg text-center text-gray-600 mt-2">Find answers to the most common questions about our platform.</p>
-
-            <div className="mt-10 space-y-4">
-                {faqData.map((faq, index) => (
-                    <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.1 }}
-                        className="border border-gray-300 rounded-lg shadow-md"
-                    >
-                        <button
-                            onClick={() => toggleFAQ(index)}
-                            className="w-full flex justify-between items-center px-5 py-4 bg-gray-100 hover:bg-gray-200 transition"
+        <div className="min-h-screen bg-gray-50">
+            <Navbar />
+            {/* Hero Section */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="relative bg-gradient-to-r from-indigo-600 to-indigo-800 py-24 sm:py-32"
+            >
+                <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+                </div>
+                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center">
+                        <motion.div
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                            className="flex justify-center mb-6"
                         >
-                            <span className="text-lg font-medium text-gray-900">{faq.question}</span>
-                            {openIndex === index ? <FaMinus className="text-gray-700" /> : <FaPlus className="text-gray-700" />}
-                        </button>
+                            <HelpCircle className="h-16 w-16 text-indigo-200" />
+                        </motion.div>
+                        <motion.h1
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="text-4xl font-extrabold text-white sm:text-5xl lg:text-6xl"
+                        >
+                            Frequently Asked Questions
+                        </motion.h1>
+                        <motion.p
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.4 }}
+                            className="mt-6 text-xl text-indigo-100 max-w-3xl mx-auto"
+                        >
+                            Find answers to common questions about UkuriKose
+                        </motion.p>
+                    </div>
+                </div>
+            </motion.div>
 
-                        {openIndex === index && (
-                            <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: "auto" }}
-                                transition={{ duration: 0.3 }}
-                                className="px-5 py-3 bg-white"
-                            >
-                                <p className="text-gray-700">{faq.answer}</p>
-                            </motion.div>
-                        )}
-                    </motion.div>
-                ))}
+            {/* Search Section */}
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-white rounded-xl shadow-xl p-4"
+                >
+                    <div className="relative">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                        <input
+                            type="text"
+                            placeholder="Search FAQs..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow"
+                        />
+                    </div>
+                </motion.div>
             </div>
-        </section>
+
+            {/* FAQ List */}
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="space-y-4"
+                >
+                    {filteredFaqs.map((faq, index) => (
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 * index }}
+                            className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200"
+                        >
+                            <button
+                                onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                                className="w-full text-left px-6 py-4 flex justify-between items-center"
+                            >
+                                <span className="text-lg font-medium text-gray-900">{faq.question}</span>
+                                {openIndex === index ? (
+                                    <ChevronUp className="h-5 w-5 text-indigo-600" />
+                                ) : (
+                                    <ChevronDown className="h-5 w-5 text-gray-400" />
+                                )}
+                            </button>
+                            <AnimatePresence>
+                                {openIndex === index && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: "auto", opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="overflow-hidden"
+                                    >
+                                        <div className="px-6 pb-4 text-gray-600">
+                                            {faq.answer}
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </motion.div>
+                    ))}
+                </motion.div>
+            </div>
+        </div>
     );
 };
 
