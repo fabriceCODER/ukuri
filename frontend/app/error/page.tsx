@@ -5,17 +5,21 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { AlertCircle, Home, RefreshCcw } from 'lucide-react';
 
-export default function Error({
-     error,
-     reset,
-}: {
+interface ErrorProps {
      error: Error & { digest?: string };
      reset: () => void;
-}) {
+}
+
+export default function Error({ error, reset }: ErrorProps) {
      useEffect(() => {
           // Log the error to an error reporting service
           console.error('Page Error:', error);
      }, [error]);
+
+     // Determine if this is an authentication error
+     const isAuthError = error.message?.toLowerCase().includes('auth') ||
+          error.message?.toLowerCase().includes('login') ||
+          error.message?.toLowerCase().includes('unauthorized');
 
      return (
           <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -33,28 +37,32 @@ export default function Error({
                     </motion.div>
 
                     <h1 className="text-2xl font-bold text-gray-900 mb-4">
-                         Oops! Something went wrong
+                         {isAuthError ? 'Authentication Required' : 'Something went wrong'}
                     </h1>
 
                     <p className="text-gray-600 mb-8">
-                         We apologize for the inconvenience. Please try again or return to the home page.
+                         {isAuthError
+                              ? 'Please log in to access this page.'
+                              : 'We apologize for the inconvenience. Please try again or return to the home page.'}
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                         <button
-                              onClick={reset}
-                              className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                         >
-                              <RefreshCcw className="w-4 h-4 mr-2" />
-                              Try Again
-                         </button>
+                         {!isAuthError && (
+                              <button
+                                   onClick={reset}
+                                   className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                              >
+                                   <RefreshCcw className="w-4 h-4 mr-2" />
+                                   Try Again
+                              </button>
+                         )}
 
                          <Link
-                              href="/"
+                              href={isAuthError ? "/login" : "/"}
                               className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                          >
                               <Home className="w-4 h-4 mr-2" />
-                              Back to Home
+                              {isAuthError ? 'Go to Login' : 'Back to Home'}
                          </Link>
                     </div>
                </motion.div>

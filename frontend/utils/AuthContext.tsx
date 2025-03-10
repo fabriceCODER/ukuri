@@ -24,27 +24,63 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
      const router = useRouter();
 
      useEffect(() => {
-          // Check for token and user data in localStorage on mount
-          const token = localStorage.getItem('token');
-          const userData = localStorage.getItem('user');
+          const initializeAuth = async () => {
+               try {
+                    const token = localStorage.getItem('token');
+                    const userData = localStorage.getItem('user');
 
-          if (token && userData) {
-               setUser(JSON.parse(userData));
-          }
-          setIsLoading(false);
+                    if (token && userData) {
+                         // Verify token with the backend
+                         try {
+                              const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/verify`, {
+                                   headers: {
+                                        Authorization: `Bearer ${token}`,
+                                   },
+                              });
+
+                              if (response.ok) {
+                                   setUser(JSON.parse(userData));
+                              } else {
+                                   // If token is invalid, clear storage
+                                   localStorage.removeItem('token');
+                                   localStorage.removeItem('user');
+                                   setUser(null);
+                              }
+                         } catch (error) {
+                              console.error('Error verifying token:', error);
+                              // If there's a network error, keep the user logged in
+                              setUser(JSON.parse(userData));
+                         }
+                    }
+               } catch (error) {
+                    console.error('Auth initialization error:', error);
+               } finally {
+                    setIsLoading(false);
+               }
+          };
+
+          initializeAuth();
      }, []);
 
      const login = (token: string, userData: User) => {
-          localStorage.setItem('token', token);
-          localStorage.setItem('user', JSON.stringify(userData));
-          setUser(userData);
+          try {
+               localStorage.setItem('token', token);
+               localStorage.setItem('user', JSON.stringify(userData));
+               setUser(userData);
+          } catch (error) {
+               console.error('Error during login:', error);
+          }
      };
 
      const logout = () => {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          setUser(null);
-          router.push('/login');
+          try {
+               localStorage.removeItem('token');
+               localStorage.removeItem('user');
+               setUser(null);
+               router.push('/login');
+          } catch (error) {
+               console.error('Error during logout:', error);
+          }
      };
 
      return (

@@ -5,85 +5,168 @@ interface RequestOptions extends RequestInit {
 }
 
 async function request(endpoint: string, options: RequestOptions = {}) {
-     const { token, ...rest } = options;
+     try {
+          const { token, ...rest } = options;
 
-     const headers = {
-          'Content-Type': 'application/json',
-          ...(token && { Authorization: `Bearer ${token}` }),
-          ...options.headers,
-     };
+          const headers = {
+               'Content-Type': 'application/json',
+               ...(token && { Authorization: `Bearer ${token}` }),
+               ...options.headers,
+          };
 
-     const response = await fetch(`${API_URL}${endpoint}`, {
-          ...rest,
-          headers,
-          credentials: 'include',
-     });
+          const response = await fetch(`${API_URL}${endpoint}`, {
+               ...rest,
+               headers,
+               credentials: 'include',
+          });
 
-     if (!response.ok) {
-          const error = await response.json();
-          throw new Error(error.message || 'API request failed');
+          if (!response.ok) {
+               try {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'API request failed');
+               } catch (jsonError) {
+                    throw new Error(`Request failed with status ${response.status}`);
+               }
+          }
+
+          try {
+               return await response.json();
+          } catch (jsonError) {
+               console.error('Error parsing JSON response:', jsonError);
+               throw new Error('Invalid response format from server');
+          }
+     } catch (error) {
+          console.error('API request error:', error);
+          if (error instanceof Error) {
+               throw error;
+          }
+          throw new Error('An unexpected error occurred');
      }
-
-     return response.json();
 }
 
 export const api = {
      auth: {
-          login: (email: string, password: string) =>
-               request('/api/auth/login', {
-                    method: 'POST',
-                    body: JSON.stringify({ email, password }),
-               }),
-          register: (name: string, email: string, password: string) =>
-               request('/api/auth/register', {
-                    method: 'POST',
-                    body: JSON.stringify({ name, email, password }),
-               }),
-          getProfile: (token: string) =>
-               request('/api/auth/profile', { token }),
+          login: async (email: string, password: string) => {
+               try {
+                    return await request('/api/auth/login', {
+                         method: 'POST',
+                         body: JSON.stringify({ email, password }),
+                    });
+               } catch (error) {
+                    console.error('Login error:', error);
+                    throw error;
+               }
+          },
+          register: async (name: string, email: string, password: string) => {
+               try {
+                    return await request('/api/auth/register', {
+                         method: 'POST',
+                         body: JSON.stringify({ name, email, password }),
+                    });
+               } catch (error) {
+                    console.error('Registration error:', error);
+                    throw error;
+               }
+          },
+          getProfile: async (token: string) => {
+               try {
+                    return await request('/api/auth/profile', { token });
+               } catch (error) {
+                    console.error('Get profile error:', error);
+                    throw error;
+               }
+          },
      },
      articles: {
-          getAll: (token: string) =>
-               request('/api/articles', { token }),
-          getOne: (id: string, token: string) =>
-               request(`/api/articles/${id}`, { token }),
-          create: (data: any, token: string) =>
-               request('/api/articles', {
-                    method: 'POST',
-                    body: JSON.stringify(data),
-                    token,
-               }),
-          update: (id: string, data: any, token: string) =>
-               request(`/api/articles/${id}`, {
-                    method: 'PUT',
-                    body: JSON.stringify(data),
-                    token,
-               }),
-          delete: (id: string, token: string) =>
-               request(`/api/articles/${id}`, {
-                    method: 'DELETE',
-                    token,
-               }),
+          getAll: async (token: string) => {
+               try {
+                    return await request('/api/articles', { token });
+               } catch (error) {
+                    console.error('Get articles error:', error);
+                    throw error;
+               }
+          },
+          getOne: async (id: string, token: string) => {
+               try {
+                    return await request(`/api/articles/${id}`, { token });
+               } catch (error) {
+                    console.error('Get article error:', error);
+                    throw error;
+               }
+          },
+          create: async (data: any, token: string) => {
+               try {
+                    return await request('/api/articles', {
+                         method: 'POST',
+                         body: JSON.stringify(data),
+                         token,
+                    });
+               } catch (error) {
+                    console.error('Create article error:', error);
+                    throw error;
+               }
+          },
+          update: async (id: string, data: any, token: string) => {
+               try {
+                    return await request(`/api/articles/${id}`, {
+                         method: 'PUT',
+                         body: JSON.stringify(data),
+                         token,
+                    });
+               } catch (error) {
+                    console.error('Update article error:', error);
+                    throw error;
+               }
+          },
+          delete: async (id: string, token: string) => {
+               try {
+                    return await request(`/api/articles/${id}`, {
+                         method: 'DELETE',
+                         token,
+                    });
+               } catch (error) {
+                    console.error('Delete article error:', error);
+                    throw error;
+               }
+          },
      },
      comments: {
-          create: (articleId: string, content: string, token: string) =>
-               request('/api/comments', {
-                    method: 'POST',
-                    body: JSON.stringify({ articleId, content }),
-                    token,
-               }),
-          delete: (id: string, token: string) =>
-               request(`/api/comments/${id}`, {
-                    method: 'DELETE',
-                    token,
-               }),
+          create: async (articleId: string, content: string, token: string) => {
+               try {
+                    return await request('/api/comments', {
+                         method: 'POST',
+                         body: JSON.stringify({ articleId, content }),
+                         token,
+                    });
+               } catch (error) {
+                    console.error('Create comment error:', error);
+                    throw error;
+               }
+          },
+          delete: async (id: string, token: string) => {
+               try {
+                    return await request(`/api/comments/${id}`, {
+                         method: 'DELETE',
+                         token,
+                    });
+               } catch (error) {
+                    console.error('Delete comment error:', error);
+                    throw error;
+               }
+          },
      },
      likes: {
-          toggle: (articleId: string, token: string) =>
-               request('/api/likes', {
-                    method: 'POST',
-                    body: JSON.stringify({ articleId }),
-                    token,
-               }),
+          toggle: async (articleId: string, token: string) => {
+               try {
+                    return await request('/api/likes', {
+                         method: 'POST',
+                         body: JSON.stringify({ articleId }),
+                         token,
+                    });
+               } catch (error) {
+                    console.error('Toggle like error:', error);
+                    throw error;
+               }
+          },
      },
 }; 
