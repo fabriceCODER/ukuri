@@ -1,41 +1,84 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Scale, Shield, Users, AlertCircle } from "lucide-react";
+import { Scale, Shield, FileText, CheckCircle, AlertCircle, Info } from "lucide-react";
 
 export default function TermsPage() {
     const sections = [
         {
-            title: 'Terms of Use',
+            title: 'Acceptance of Terms',
+            icon: CheckCircle,
+            description: 'Understanding and agreeing to our terms of service',
             content: [
-                'By accessing and using UkuriKose, you agree to comply with and be bound by these Terms of Service.',
-                'You must be at least 18 years old to use our services.',
-                'You are responsible for maintaining the confidentiality of your account credentials.',
-            ]
-        },
-        {
-            title: 'Content Guidelines',
-            content: [
-                'All submitted content must be original and not infringe on any intellectual property rights.',
-                'Content must not contain hate speech, discrimination, or inappropriate material.',
-                'We reserve the right to remove any content that violates our guidelines.',
+                'By accessing and using UkuriKose, you agree to be bound by these terms',
+                'You must be at least 18 years old to use our services',
+                'You are responsible for maintaining the security of your account',
+                'You agree to provide accurate and complete information',
+                'You understand that your content may be reviewed and moderated',
+                'You acknowledge that we may modify these terms at any time'
             ]
         },
         {
             title: 'User Responsibilities',
+            icon: Shield,
+            description: 'Your obligations and responsibilities as a user',
             content: [
-                'Users must provide accurate information when creating an account.',
-                'Users are responsible for all activities that occur under their account.',
-                'Users must not engage in any activity that disrupts our services.',
+                'Maintain the confidentiality of your account credentials',
+                'Respect intellectual property rights and copyright laws',
+                'Follow community guidelines and content policies',
+                'Report any violations or suspicious activities',
+                'Keep your account information up to date',
+                'Use the platform in compliance with applicable laws'
             ]
         },
         {
-            title: 'Privacy and Data',
+            title: 'Content Guidelines',
+            icon: FileText,
+            description: 'Rules and standards for content creation and sharing',
             content: [
-                'We collect and process personal data as described in our Privacy Policy.',
-                'Users retain ownership of their content but grant us license to use it.',
-                'We implement security measures to protect user data.',
+                'Content must be original and not infringe on others\' rights',
+                'No hate speech, harassment, or discriminatory content',
+                'No spam, misleading information, or malicious content',
+                'Respect privacy and personal information',
+                'Follow proper citation and attribution practices',
+                'Maintain professional and respectful communication'
             ]
+        },
+        {
+            title: 'Platform Rules',
+            icon: Scale,
+            description: 'General rules and policies for using our platform',
+            content: [
+                'No unauthorized access or use of the platform',
+                'No interference with platform functionality',
+                'No automated scraping or data collection',
+                'No creation of multiple accounts',
+                'No sharing of account access',
+                'No use of the platform for illegal purposes'
+            ]
+        }
+    ];
+
+    const features = [
+        {
+            icon: Shield,
+            title: 'Secure Platform',
+            description: 'Your data and content are protected with industry-standard security measures'
+        },
+        {
+            icon: CheckCircle,
+            title: 'Clear Guidelines',
+            description: 'Transparent rules and policies for all users'
+        },
+        {
+            icon: AlertCircle,
+            title: 'Fair Moderation',
+            description: 'Consistent and fair content moderation practices'
+        },
+        {
+            icon: Info,
+            title: 'Regular Updates',
+            description: 'Terms are regularly reviewed and updated as needed'
         }
     ];
 
@@ -74,55 +117,39 @@ export default function TermsPage() {
                             transition={{ delay: 0.4 }}
                             className="mt-6 text-xl text-indigo-100 max-w-3xl mx-auto"
                         >
-                            Please read these terms carefully before using our services
+                            Please read these terms carefully before using our platform
                         </motion.p>
                     </div>
                 </div>
             </motion.div>
 
-            {/* Key Points Section */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16">
+            {/* Features Grid */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="grid grid-cols-1 md:grid-cols-3 gap-6"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
                 >
-                    {[
-                        {
-                            icon: Shield,
-                            title: 'Security First',
-                            description: 'We prioritize the security and privacy of our users data'
-                        },
-                        {
-                            icon: Users,
-                            title: 'Community Guidelines',
-                            description: 'Clear rules to maintain a respectful environment'
-                        },
-                        {
-                            icon: AlertCircle,
-                            title: 'Your Rights',
-                            description: 'Understanding your rights and responsibilities'
-                        }
-                    ].map((item, index) => (
+                    {features.map((feature, index) => (
                         <motion.div
-                            key={item.title}
+                            key={feature.title}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 + index * 0.1 }}
                             className="bg-white rounded-xl shadow-xl p-8 text-center transform hover:scale-105 transition-transform duration-300"
                         >
                             <div className="flex items-center justify-center w-16 h-16 mx-auto rounded-full bg-indigo-100 mb-6">
-                                <item.icon className="h-8 w-8 text-indigo-600" />
+                                <feature.icon className="h-8 w-8 text-indigo-600" />
                             </div>
-                            <h3 className="text-xl font-semibold text-gray-900 mb-2">{item.title}</h3>
-                            <p className="text-gray-600">{item.description}</p>
+                            <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
+                            <p className="text-gray-600">{feature.description}</p>
                         </motion.div>
                     ))}
                 </motion.div>
             </div>
 
             {/* Terms Sections */}
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
                 <div className="space-y-8">
                     {sections.map((section, index) => (
                         <motion.div
@@ -130,10 +157,18 @@ export default function TermsPage() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 * index }}
-                            className="bg-white rounded-xl shadow-sm p-8"
+                            className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 p-8"
                         >
-                            <h2 className="text-2xl font-semibold text-gray-900 mb-4">{section.title}</h2>
-                            <ul className="space-y-4">
+                            <div className="flex items-center mb-6">
+                                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-100 mr-4">
+                                    <section.icon className="h-6 w-6 text-indigo-600" />
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-semibold text-gray-900">{section.title}</h2>
+                                    <p className="text-gray-600 mt-1">{section.description}</p>
+                                </div>
+                            </div>
+                            <ul className="space-y-4 ml-4">
                                 {section.content.map((item, itemIndex) => (
                                     <li key={itemIndex} className="flex items-start">
                                         <span className="flex-shrink-0 h-2 w-2 mt-2 rounded-full bg-indigo-500 mr-3" />
@@ -145,14 +180,39 @@ export default function TermsPage() {
                     ))}
                 </div>
 
-                {/* Last Updated */}
+                {/* Contact Section */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="text-center mt-12 text-sm text-gray-500"
+                    className="mt-16 bg-white rounded-xl shadow-sm p-8 text-center"
                 >
-                    Last updated: {new Date().toLocaleDateString()}
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-4">Have Questions?</h3>
+                    <p className="text-gray-600 mb-6">
+                        If you have any questions about our terms of service, please contact our support team
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <a
+                            href="mailto:support@ukurikose.com"
+                            className="inline-flex items-center px-6 py-3 rounded-lg text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200"
+                        >
+                            support@ukurikose.com
+                        </a>
+                        <a
+                            href="/contact"
+                            className="inline-flex items-center px-6 py-3 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200"
+                        >
+                            Contact Support
+                        </a>
+                    </div>
+                    <div className="mt-8 pt-8 border-t border-gray-200">
+                        <p className="text-sm text-gray-500">
+                            Last updated: {new Date().toLocaleDateString()}
+                        </p>
+                        <p className="text-sm text-gray-500 mt-2">
+                            These terms are effective as of February 15, 2024
+                        </p>
+                    </div>
                 </motion.div>
             </div>
         </div>
