@@ -64,10 +64,10 @@ export const api = {
                apiRequest('/api/auth/logout', {
                     method: 'POST',
                }),
-          googleLogin: () => apiRequest('/api/auth/google', { method: 'GET' }),
-          githubLogin: () => apiRequest('/api/auth/github', { method: 'GET' }),
-          handleOAuthCallback: (provider: string, code: string) =>
-               apiRequest(`/api/auth/${provider}/callback`, {
+          googleLogin: () => apiRequest<{ url: string }>('/api/auth/google', { method: 'GET' }),
+          githubLogin: () => apiRequest<{ url: string }>('/api/auth/github', { method: 'GET' }),
+          handleOAuthCallback: <T>(provider: string, code: string) =>
+               apiRequest<T>(`/api/auth/${provider}/callback`, {
                     method: 'POST',
                     body: JSON.stringify({ code }),
                }),

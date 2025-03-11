@@ -2,10 +2,15 @@
 import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Mail, Lock, LinkedinIcon, Facebook, Loader2, AlertCircle } from "lucide-react";
+import { Mail, Lock, Loader2, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { api } from "@/utils/api";
+
+interface OAuthResponse {
+    token: string;
+    url?: string;
+}
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -25,7 +30,7 @@ const Login = () => {
             if (code && provider) {
                 setIsLoading(true);
                 try {
-                    const { data, error } = await api.auth.handleOAuthCallback(provider, code);
+                    const { data, error } = await api.auth.handleOAuthCallback<OAuthResponse>(provider, code);
                     if (error) throw new Error(error);
 
                     if (data) {
@@ -80,13 +85,13 @@ const Login = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="sm:mx-auto sm:w-full sm:max-w-md"
             >
-                <Link href="/" className="flex justify-center mb-6">
+                {/* <Link href="/" className="flex justify-center mb-6">
                     <img
                         className="h-12 w-auto"
                         src="/logo.png"
                         alt="UkuriKose"
                     />
-                </Link>
+                </Link> */}
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                     Sign in to your account
                 </h2>
