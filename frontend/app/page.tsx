@@ -12,7 +12,7 @@ const featuredArticles = [
         author: 'John Doe',
         readTime: '5 min read',
         likes: 234,
-        image: '/images/articles/a.jpg'
+        image: '/images/ai-future.jpg'
     },
     {
         id: 2,
@@ -21,7 +21,7 @@ const featuredArticles = [
         author: 'Jane Smith',
         readTime: '7 min read',
         likes: 189,
-        image: '/articles/sustainable-business.jpg'
+        image: '/images/sustainable.jpg'
     },
     {
         id: 3,
@@ -30,7 +30,7 @@ const featuredArticles = [
         author: 'Mike Johnson',
         readTime: '6 min read',
         likes: 156,
-        image: '/articles/digital-transformation.jpg'
+        image: '/images/digital.jpg'
     }
 ];
 
@@ -45,7 +45,7 @@ const categories = [
 
 const HomePage = () => {
     return (
-        <div className="min-h-screen relative bg-gradient-to-b from-gray-900 to-gray-800 overflow-hidden">
+        <div className="min-h-screen relative bg-gradient-to-b from-blue-900 to-gray-800 overflow-hidden">
             {/* Background SVG */}
             <div className="absolute inset-0 opacity-10">
                 <svg
@@ -78,7 +78,7 @@ const HomePage = () => {
                         className="text-gray-300"
                     />
                     {/* News icons and dots around the globe */}
-                    <g className="text-gray-200">
+                    <g className="text-green-200">
                         <circle cx="500" cy="300" r="4" />
                         <circle cx="300" cy="500" r="4" />
                         <circle cx="450" cy="450" r="4" />
@@ -87,7 +87,7 @@ const HomePage = () => {
                         <circle cx="250" cy="400" r="4" />
                     </g>
                     {/* Document icons */}
-                    <g className="text-gray-300">
+                    <g className="text-green-300">
                         <path d="M480 280 h20 v25 h-20 z" />
                         <path d="M280 480 h20 v25 h-20 z" />
                         <path d="M430 430 h20 v25 h-20 z" />
@@ -154,6 +154,59 @@ const HomePage = () => {
                         <div className="p-6 rounded-lg bg-gray-800/50 backdrop-blur-sm">
                             <h3 className="text-xl font-semibold text-white mb-2">Expert Analysis</h3>
                             <p className="text-gray-300">Gain insights from industry experts</p>
+                        </div>
+                    </motion.div>
+
+                    {/* Featured Articles Section */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.8, duration: 0.8 }}
+                        className="mt-24 w-full max-w-7xl mx-auto"
+                    >
+                        <h2 className="text-3xl font-bold text-white mb-12 text-center">
+                            Featured Articles
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
+                            {featuredArticles.map((article, index) => (
+                                <motion.div
+                                    key={article.id}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 1 + index * 0.2 }}
+                                    whileHover={{ y: -5 }}
+                                    className="bg-gray-800/40 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-700/50 hover:border-indigo-500/50 transition-all duration-300"
+                                >
+                                    <div className="relative h-48 bg-gray-900">
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <BookOpen className="w-12 h-12 text-indigo-400 opacity-50" />
+                                        </div>
+                                    </div>
+                                    <div className="p-6">
+                                        <div className="flex items-center gap-2 text-sm text-gray-400 mb-3">
+                                            <Clock className="h-4 w-4" />
+                                            <span>{article.readTime}</span>
+                                            <span className="mx-2">•</span>
+                                            <ThumbsUp className="h-4 w-4" />
+                                            <span>{article.likes}</span>
+                                        </div>
+                                        <h3 className="text-xl font-semibold text-white mb-2">
+                                            {article.title}
+                                        </h3>
+                                        <p className="text-gray-400 mb-4">{article.excerpt}</p>
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-sm text-gray-500">By {article.author}</span>
+                                            <Link
+                                                href={`/articles/${article.id}`}
+                                                className="text-indigo-400 hover:text-indigo-300 text-sm font-medium inline-flex items-center gap-1 transition-colors duration-200"
+                                            >
+                                                Read more
+                                                <ArrowRight className="h-4 w-4" />
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
                         </div>
                     </motion.div>
                 </motion.div>
