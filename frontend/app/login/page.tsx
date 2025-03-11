@@ -13,13 +13,13 @@ interface OAuthResponse {
 }
 
 const Login = () => {
+    const router = useRouter();
+    const { login } = useAuth();
+    const searchParams = useSearchParams();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const router = useRouter();
-    const { login } = useAuth();
-    const searchParams = useSearchParams();
 
     // Handle OAuth callback
     useEffect(() => {
