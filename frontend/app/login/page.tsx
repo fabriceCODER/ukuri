@@ -85,13 +85,7 @@ const Login = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="sm:mx-auto sm:w-full sm:max-w-md"
             >
-                {/* <Link href="/" className="flex justify-center mb-6">
-                    <img
-                        className="h-12 w-auto"
-                        src="/logo.png"
-                        alt="UkuriKose"
-                    />
-                </Link> */}
+              
                 <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                     Sign in to your account
                 </h2>
