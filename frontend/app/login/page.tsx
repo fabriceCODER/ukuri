@@ -1,10 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Mail, Lock, LinkedinIcon, Facebook, Loader2, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
-import { useAuth } from "@/utils/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { api } from "@/utils/api";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -14,6 +15,34 @@ const Login = () => {
     const router = useRouter();
     const { login } = useAuth();
     const searchParams = useSearchParams();
+
+    // Handle OAuth callback
+    useEffect(() => {
+        const handleOAuthCallback = async () => {
+            const code = searchParams.get('code');
+            const provider = searchParams.get('provider');
+
+            if (code && provider) {
+                setIsLoading(true);
+                try {
+                    const { data, error } = await api.auth.handleOAuthCallback(provider, code);
+                    if (error) throw new Error(error);
+
+                    if (data) {
+                        localStorage.setItem('token', data.token);
+                        const from = searchParams.get('from') || '/dashboard';
+                        router.push(from);
+                    }
+                } catch (err) {
+                    setError(err instanceof Error ? err.message : "OAuth authentication failed");
+                } finally {
+                    setIsLoading(false);
+                }
+            }
+        };
+
+        handleOAuthCallback();
+    }, [searchParams, router]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -28,6 +57,19 @@ const Login = () => {
             setError(err instanceof Error ? err.message : "Login failed");
         } finally {
             setIsLoading(false);
+        }
+    };
+
+    const handleOAuthLogin = async (provider: 'google' | 'github') => {
+        try {
+            const { data, error } = await api.auth[`${provider}Login`]();
+            if (error) throw new Error(error);
+
+            if (data?.url) {
+                window.location.href = data.url;
+            }
+        } catch (err) {
+            setError(err instanceof Error ? err.message : `${provider} login failed`);
         }
     };
 
@@ -188,7 +230,9 @@ const Login = () => {
                         <div className="mt-6 grid grid-cols-2 gap-3">
                             <button
                                 type="button"
-                                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                                onClick={() => handleOAuthLogin('google')}
+                                disabled={isLoading}
+                                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <img
                                     className="h-5 w-5"
@@ -199,7 +243,9 @@ const Login = () => {
                             </button>
                             <button
                                 type="button"
-                                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                                onClick={() => handleOAuthLogin('github')}
+                                disabled={isLoading}
+                                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <img
                                     className="h-5 w-5"
