@@ -2,10 +2,9 @@
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Mail, Lock, Loader2, AlertCircle } from "lucide-react";
+import { Mail, Lock, Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { api } from "@/utils/api";
 
 const Login = () => {
     const router = useRouter();
@@ -15,10 +14,29 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [showPassword, setShowPassword] = useState(false);
+    const [touched, setTouched] = useState({ email: false, password: false });
+
+    const validateEmail = (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
+
+        // Validate inputs before submission
+        if (!email || !password) {
+            setError("Please fill in all fields");
+            return;
+        }
+
+        if (!validateEmail(email)) {
+            setError("Please enter a valid email address");
+            return;
+        }
+
         setIsLoading(true);
 
         try {
@@ -32,6 +50,10 @@ const Login = () => {
         }
     };
 
+    const handleBlur = (field: 'email' | 'password') => {
+        setTouched(prev => ({ ...prev, [field]: true }));
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
             <motion.div
@@ -43,12 +65,12 @@ const Login = () => {
                     Welcome back
                 </h2>
                 <p className="mt-2 text-center text-sm text-gray-600 max-w">
-                    Or{" "}
+                    New to our platform?{" "}
                     <Link
                         href="/register"
                         className="font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-200"
                     >
-                        create a new account
+                        Create an account
                     </Link>
                 </p>
             </motion.div>
@@ -61,7 +83,11 @@ const Login = () => {
                     className="bg-white py-8 px-4 shadow-xl shadow-gray-200/50 sm:rounded-xl sm:px-10 border border-gray-100"
                 >
                     {error && (
-                        <div className="mb-6 rounded-lg bg-red-50 p-4">
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mb-6 rounded-lg bg-red-50 p-4"
+                        >
                             <div className="flex">
                                 <div className="flex-shrink-0">
                                     <AlertCircle className="h-5 w-5 text-red-400" />
@@ -72,7 +98,7 @@ const Login = () => {
                                     </h3>
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     )}
 
                     <form className="space-y-6" onSubmit={handleSubmit}>
@@ -95,10 +121,17 @@ const Login = () => {
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent sm:text-sm transition duration-150 ease-in-out"
+                                    onBlur={() => handleBlur('email')}
+                                    className={`appearance-none block w-full pl-10 pr-3 py-2 border ${touched.email && !validateEmail(email) && email
+                                        ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                        : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                        } rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent sm:text-sm transition duration-150 ease-in-out`}
                                     placeholder="you@example.com"
                                 />
                             </div>
+                            {touched.email && !validateEmail(email) && email && (
+                                <p className="mt-1 text-sm text-red-600">Please enter a valid email address</p>
+                            )}
                         </div>
 
                         <div>
@@ -115,15 +148,33 @@ const Login = () => {
                                 <input
                                     id="password"
                                     name="password"
-                                    type="password"
+                                    type={showPassword ? "text" : "password"}
                                     autoComplete="current-password"
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent sm:text-sm transition duration-150 ease-in-out"
+                                    onBlur={() => handleBlur('password')}
+                                    className={`appearance-none block w-full pl-10 pr-10 py-2 border ${touched.password && !password
+                                        ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                        : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                        } rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent sm:text-sm transition duration-150 ease-in-out`}
                                     placeholder="••••••••"
                                 />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                >
+                                    {showPassword ? (
+                                        <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-500" />
+                                    ) : (
+                                        <Eye className="h-5 w-5 text-gray-400 hover:text-gray-500" />
+                                    )}
+                                </button>
                             </div>
+                            {touched.password && !password && (
+                                <p className="mt-1 text-sm text-red-600">Password is required</p>
+                            )}
                         </div>
 
                         <div className="flex items-center justify-between">
