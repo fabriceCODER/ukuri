@@ -8,6 +8,33 @@ interface ApiResponse<T> {
      status: number;
 }
 
+interface LoginResponse {
+     user: {
+          id: string;
+          name: string;
+          email: string;
+          role: string;
+     };
+     token: string;
+}
+
+interface RegisterResponse {
+     user: {
+          id: string;
+          name: string;
+          email: string;
+          role: string;
+     };
+     token: string;
+}
+
+interface UserResponse {
+     id: string;
+     name: string;
+     email: string;
+     role: string;
+}
+
 export async function apiRequest<T>(
      endpoint: string,
      options: RequestInit = {}
@@ -28,6 +55,10 @@ export async function apiRequest<T>(
           });
 
           if (!response.ok) {
+               if (response.status === 401) {
+                    // Clear token if unauthorized
+                    localStorage.removeItem('token');
+               }
                const errorData = await response.json().catch(() => ({}));
                return {
                     error: errorData.message || `HTTP error! status: ${response.status}`,
@@ -51,14 +82,14 @@ export async function apiRequest<T>(
 
 export const api = {
      auth: {
-          me: () => apiRequest('/api/auth/me'),
+          me: () => apiRequest<UserResponse>('/api/auth/me'),
           login: (email: string, password: string) =>
-               apiRequest('/api/auth/login', {
+               apiRequest<LoginResponse>('/api/auth/login', {
                     method: 'POST',
                     body: JSON.stringify({ email, password }),
                }),
           register: (name: string, email: string, password: string) =>
-               apiRequest('/api/auth/register', {
+               apiRequest<RegisterResponse>('/api/auth/register', {
                     method: 'POST',
                     body: JSON.stringify({ name, email, password }),
                }),

@@ -3,19 +3,31 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, FileText, AlertCircle, Loader2, CheckCircle, Image as ImageIcon } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { api } from '@/utils/api';
+
+interface SubmitFormData {
+    title: string;
+    summary: string;
+    content: string;
+    category: string;
+    tags: string;
+    coverImage: File | null;
+}
 
 export default function SubmitPage() {
-    const [formData, setFormData] = useState({
+    const { user } = useAuth();
+    const [formData, setFormData] = useState<SubmitFormData>({
         title: '',
         summary: '',
         content: '',
         category: '',
         tags: '',
-        coverImage: null as File | null,
+        coverImage: null,
     });
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
-    const [error, setError] = useState('');
+    const [error, setError] = useState<string | null>(null);
 
     const categories = [
         'Technology',
@@ -44,22 +56,26 @@ export default function SubmitPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        setError('');
+        setError(null);
+        setIsSuccess(false);
 
         try {
-            // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-            setIsSuccess(true);
-            setFormData({
-                title: '',
-                summary: '',
-                content: '',
-                category: '',
-                tags: '',
-                coverImage: null,
-            });
-        } catch (err) {
-            setError('Failed to submit article. Please try again later.');
+            const response = await api.articles.create(formData);
+            if (response.data) {
+                setIsSuccess(true);
+                setFormData({
+                    title: '',
+                    summary: '',
+                    content: '',
+                    category: '',
+                    tags: '',
+                    coverImage: null,
+                });
+            } else {
+                throw new Error(response.error || 'Failed to submit article');
+            }
+        } catch {
+            setError('Failed to submit article. Please try again.');
         } finally {
             setIsLoading(false);
         }

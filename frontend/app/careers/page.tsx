@@ -198,7 +198,7 @@ export default function CareersPage() {
                     >
                          <h2 className="text-3xl font-bold text-white mb-4">Ready to Join Us?</h2>
                          <p className="text-xl text-indigo-100 mb-8 max-w-2xl mx-auto">
-                              We're always looking for talented individuals to join our team. Don't see a position that matches your skills? Send us your resume anyway!
+                              We&apos;re always looking for talented individuals to join our team. Don&apos;t see a position that matches your skills? Send us your resume anyway!
                          </p>
                          <a
                               href="/careers/apply"

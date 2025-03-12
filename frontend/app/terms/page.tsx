@@ -83,138 +83,48 @@ export default function TermsPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            {/* Hero Section */}
+        <div className="min-h-screen bg-gray-50 py-12">
             <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="relative bg-gradient-to-r from-indigo-600 to-indigo-800 py-24 sm:py-32"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8"
             >
-                <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
-                </div>
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center">
-                        <motion.div
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.2 }}
-                            className="flex justify-center mb-6"
-                        >
-                            <Scale className="h-16 w-16 text-indigo-200" />
-                        </motion.div>
-                        <motion.h1
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.3 }}
-                            className="text-4xl font-extrabold text-white sm:text-5xl lg:text-6xl"
-                        >
-                            Terms of Service
-                        </motion.h1>
-                        <motion.p
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.4 }}
-                            className="mt-6 text-xl text-indigo-100 max-w-3xl mx-auto"
-                        >
-                            Please read these terms carefully before using our platform
-                        </motion.p>
+                <div className="bg-white rounded-lg shadow-sm p-8">
+                    <h1 className="text-3xl font-bold text-gray-900 mb-8">Terms of Service</h1>
+
+                    <div className="space-y-6 text-gray-600">
+                        <section>
+                            <h2 className="text-xl font-semibold text-gray-900 mb-4">1. Agreement to Terms</h2>
+                            <p>By accessing our website, you agree to be bound by these terms of service and all applicable laws and regulations.</p>
+                        </section>
+
+                        <section>
+                            <h2 className="text-xl font-semibold text-gray-900 mb-4">2. Use License</h2>
+                            <p>Permission is granted to temporarily access the materials on our website for personal, non-commercial use only.</p>
+                        </section>
+
+                        <section>
+                            <h2 className="text-xl font-semibold text-gray-900 mb-4">3. User Content</h2>
+                            <p>You retain all rights to any content you submit, post or display on or through our service.</p>
+                        </section>
+
+                        <section>
+                            <h2 className="text-xl font-semibold text-gray-900 mb-4">4. Privacy</h2>
+                            <p>Please review our Privacy Policy to understand how we collect and use your information.</p>
+                        </section>
+
+                        <section>
+                            <h2 className="text-xl font-semibold text-gray-900 mb-4">5. Modifications</h2>
+                            <p>We reserve the right to modify or replace these terms at any time. We&apos;ll notify you of any changes by posting the new terms on this page.</p>
+                        </section>
+
+                        <section>
+                            <h2 className="text-xl font-semibold text-gray-900 mb-4">6. Contact Us</h2>
+                            <p>If you have any questions about these terms, please contact us.</p>
+                        </section>
                     </div>
                 </div>
             </motion.div>
-
-            {/* Features Grid */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-24 relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
-                >
-                    {features.map((feature, index) => (
-                        <motion.div
-                            key={feature.title}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 + index * 0.1 }}
-                            className="bg-white rounded-xl shadow-xl p-8 text-center transform hover:scale-105 transition-transform duration-300"
-                        >
-                            <div className="flex items-center justify-center w-16 h-16 mx-auto rounded-full bg-indigo-100 mb-6">
-                                <feature.icon className="h-8 w-8 text-indigo-600" />
-                            </div>
-                            <h3 className="text-xl font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                            <p className="text-gray-600">{feature.description}</p>
-                        </motion.div>
-                    ))}
-                </motion.div>
-            </div>
-
-            {/* Terms Sections */}
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-                <div className="space-y-8">
-                    {sections.map((section, index) => (
-                        <motion.div
-                            key={section.title}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.1 * index }}
-                            className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 p-8"
-                        >
-                            <div className="flex items-center mb-6">
-                                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-100 mr-4">
-                                    <section.icon className="h-6 w-6 text-indigo-600" />
-                                </div>
-                                <div>
-                                    <h2 className="text-2xl font-semibold text-gray-900">{section.title}</h2>
-                                    <p className="text-gray-600 mt-1">{section.description}</p>
-                                </div>
-                            </div>
-                            <ul className="space-y-4 ml-4">
-                                {section.content.map((item, itemIndex) => (
-                                    <li key={itemIndex} className="flex items-start">
-                                        <span className="flex-shrink-0 h-2 w-2 mt-2 rounded-full bg-indigo-500 mr-3" />
-                                        <span className="text-gray-600">{item}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        </motion.div>
-                    ))}
-                </div>
-
-                {/* Contact Section */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    className="mt-16 bg-white rounded-xl shadow-sm p-8 text-center"
-                >
-                    <h3 className="text-2xl font-semibold text-gray-900 mb-4">Have Questions?</h3>
-                    <p className="text-gray-600 mb-6">
-                        If you have any questions about our terms of service, please contact our support team
-                    </p>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <a
-                            href="mailto:support@ukurikose.com"
-                            className="inline-flex items-center px-6 py-3 rounded-lg text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors duration-200"
-                        >
-                            support@ukurikose.com
-                        </a>
-                        <a
-                            href="/contact"
-                            className="inline-flex items-center px-6 py-3 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200"
-                        >
-                            Contact Support
-                        </a>
-                    </div>
-                    <div className="mt-8 pt-8 border-t border-gray-200">
-                        <p className="text-sm text-gray-500">
-                            Last updated: {new Date().toLocaleDateString()}
-                        </p>
-                        <p className="text-sm text-gray-500 mt-2">
-                            These terms are effective as of February 15, 2024
-                        </p>
-                    </div>
-                </motion.div>
-            </div>
         </div>
     );
 }

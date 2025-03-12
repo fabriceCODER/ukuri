@@ -1,7 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { api } from '@/utils/api';
 
 interface User {
@@ -14,18 +13,19 @@ interface User {
 interface AuthContextType {
      user: User | null;
      loading: boolean;
+     error: string | null;
      login: (email: string, password: string) => Promise<void>;
      register: (name: string, email: string, password: string) => Promise<void>;
      logout: () => Promise<void>;
-     isAuthenticated: boolean;
+     clearError: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
      const [user, setUser] = useState<User | null>(null);
      const [loading, setLoading] = useState(true);
-     const router = useRouter();
+     const [error, setError] = useState<string | null>(null);
 
      useEffect(() => {
           checkAuth();
@@ -33,21 +33,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
      const checkAuth = async () => {
           try {
-               const token = localStorage.getItem('token');
-               if (!token) {
-                    setLoading(false);
-                    return;
+               const response = await api.auth.me();
+               if (response.data) {
+                    setUser(response.data);
                }
-
-               const { data, error } = await api.auth.me();
-               if (error) {
-                    localStorage.removeItem('token');
-               } else if (data) {
-                    setUser(data);
-               }
-          } catch (error) {
-               console.error('Auth check failed:', error);
-               localStorage.removeItem('token');
+          } catch (err) {
+               console.error('Auth check failed:', err);
           } finally {
                setLoading(false);
           }
@@ -55,51 +46,60 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
      const login = async (email: string, password: string) => {
           try {
-               const { data, error } = await api.auth.login(email, password);
-               if (error) {
-                    throw new Error(error);
+               setError(null);
+               const response = await api.auth.login(email, password);
+
+               if (response.error) {
+                    throw new Error(response.error);
                }
-               if (data) {
-                    localStorage.setItem('token', data.token);
-                    setUser(data.user);
-                    router.push('/dashboard');
+
+               if (response.data) {
+                    setUser(response.data.user);
+                    // Store the token if your API returns one
+                    if (response.data.token) {
+                         localStorage.setItem('token', response.data.token);
+                    }
                }
-          } catch (error) {
-               console.error('Login failed:', error);
-               throw error;
+          } catch (err) {
+               setError(err instanceof Error ? err.message : 'Login failed');
+               throw err;
           }
      };
 
      const register = async (name: string, email: string, password: string) => {
           try {
-               const { data, error } = await api.auth.register(name, email, password);
-               if (error) {
-                    throw new Error(error);
+               setError(null);
+               const response = await api.auth.register(name, email, password);
+
+               if (response.error) {
+                    throw new Error(response.error);
                }
-               if (data) {
-                    localStorage.setItem('token', data.token);
-                    setUser(data.user);
-                    router.push('/dashboard');
+
+               if (response.data) {
+                    setUser(response.data.user);
+                    // Store the token if your API returns one
+                    if (response.data.token) {
+                         localStorage.setItem('token', response.data.token);
+                    }
                }
-          } catch (error) {
-               console.error('Registration failed:', error);
-               throw error;
+          } catch (err) {
+               setError(err instanceof Error ? err.message : 'Registration failed');
+               throw err;
           }
      };
 
      const logout = async () => {
           try {
-               const token = localStorage.getItem('token');
-               if (token) {
-                    await api.auth.logout();
-               }
-          } catch (error) {
-               console.error('Logout failed:', error);
-          } finally {
-               localStorage.removeItem('token');
+               await api.auth.logout();
                setUser(null);
-               router.push('/');
+               localStorage.removeItem('token');
+          } catch (err) {
+               console.error('Logout failed:', err);
           }
+     };
+
+     const clearError = () => {
+          setError(null);
      };
 
      return (
@@ -107,10 +107,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                value={{
                     user,
                     loading,
+                    error,
                     login,
                     register,
                     logout,
-                    isAuthenticated: !!user,
+                    clearError,
                }}
           >
                {children}

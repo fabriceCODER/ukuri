@@ -11,9 +11,8 @@ export default function ContactPage() {
         subject: '',
         message: '',
     });
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<'success' | 'error' | null>(null);
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -24,18 +23,18 @@ export default function ContactPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
-        setError('');
+        setIsSubmitting(true);
+        setSubmitStatus(null);
 
         try {
             // Simulate API call
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            setIsSuccess(true);
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            setSubmitStatus('success');
             setFormData({ name: '', email: '', subject: '', message: '' });
-        } catch (err) {
-            setError('Failed to send message. Please try again later.');
+        } catch {
+            setSubmitStatus('error');
         } finally {
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -74,8 +73,7 @@ export default function ContactPage() {
                             transition={{ delay: 0.4 }}
                             className="mt-6 text-xl text-indigo-100 max-w-3xl mx-auto"
                         >
-                            Have questions or suggestions? We&apos;d love to hear from you.
-                            Our team is always here to help and improve your experience.
+                            We&apos;d love to hear from you. Please fill out the form below.
                         </motion.p>
                     </div>
                 </div>
@@ -202,18 +200,18 @@ export default function ContactPage() {
                             />
                         </div>
 
-                        {error && (
+                        {submitStatus === 'error' && (
                             <motion.div
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 className="bg-red-50 text-red-700 p-4 rounded-lg flex items-center"
                             >
                                 <AlertCircle className="h-5 w-5 mr-2" />
-                                <span>{error}</span>
+                                <span>Failed to send message. Please try again later.</span>
                             </motion.div>
                         )}
 
-                        {isSuccess && (
+                        {submitStatus === 'success' && (
                             <motion.div
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -227,10 +225,10 @@ export default function ContactPage() {
                         <div>
                             <button
                                 type="submit"
-                                disabled={isLoading}
+                                disabled={isSubmitting}
                                 className="w-full flex justify-center items-center px-6 py-4 border border-transparent rounded-lg text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                             >
-                                {isLoading ? (
+                                {isSubmitting ? (
                                     <Loader2 className="h-5 w-5 animate-spin" />
                                 ) : (
                                     <>

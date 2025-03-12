@@ -149,8 +149,8 @@ const Register = () => {
                                              onChange={(e) => setName(e.target.value)}
                                              onBlur={() => handleBlur('name')}
                                              className={`appearance-none block w-full pl-10 pr-3 py-2 border ${touched.name && name.length < 2
-                                                       ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                                                       : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                                  ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                                  : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
                                                   } rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent sm:text-sm transition duration-150 ease-in-out`}
                                              placeholder="John Doe"
                                         />
@@ -181,8 +181,8 @@ const Register = () => {
                                              onChange={(e) => setEmail(e.target.value)}
                                              onBlur={() => handleBlur('email')}
                                              className={`appearance-none block w-full pl-10 pr-3 py-2 border ${touched.email && !validateEmail(email) && email
-                                                       ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                                                       : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                                  ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                                  : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
                                                   } rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent sm:text-sm transition duration-150 ease-in-out`}
                                              placeholder="you@example.com"
                                         />
@@ -213,8 +213,8 @@ const Register = () => {
                                              onChange={(e) => setPassword(e.target.value)}
                                              onBlur={() => handleBlur('password')}
                                              className={`appearance-none block w-full pl-10 pr-10 py-2 border ${touched.password && !validatePassword(password) && password
-                                                       ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                                                       : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                                  ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                                  : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
                                                   } rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent sm:text-sm transition duration-150 ease-in-out`}
                                              placeholder="••••••••"
                                         />
@@ -256,8 +256,8 @@ const Register = () => {
                                              onChange={(e) => setConfirmPassword(e.target.value)}
                                              onBlur={() => handleBlur('confirmPassword')}
                                              className={`appearance-none block w-full pl-10 pr-10 py-2 border ${touched.confirmPassword && password !== confirmPassword
-                                                       ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
-                                                       : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
+                                                  ? 'border-red-300 focus:ring-red-500 focus:border-red-500'
+                                                  : 'border-gray-300 focus:ring-indigo-500 focus:border-indigo-500'
                                                   } rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-transparent sm:text-sm transition duration-150 ease-in-out`}
                                              placeholder="••••••••"
                                         />

@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Users, Award, Globe, BookOpen, Target, Rocket } from 'lucide-react';
+import { Award, Globe, BookOpen, Target, Rocket } from 'lucide-react';
 
 export default function AboutPage() {
     const stats = [

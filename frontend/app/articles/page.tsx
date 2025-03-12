@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Search, Filter, Clock, User, ThumbsUp, Tag, TrendingUp, Eye } from 'lucide-react';
+import { Search, Filter, ArrowRight, Clock, ThumbsUp } from 'lucide-react';
 import Image from 'next/image';
 
 export default function ArticlesPage() {

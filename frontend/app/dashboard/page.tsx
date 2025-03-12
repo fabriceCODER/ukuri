@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { useAuth } from '@/utils/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { api } from '@/utils/api';
 import AdminPanel from "@/components/dashboard/AdminPanel";
 import CreatorPanel from "@/components/dashboard/CreatorPanel";
@@ -121,7 +121,7 @@ export default function Dashboard() {
                         Welcome back, {user.name}!
                     </h1>
                     <p className="text-gray-600 mt-1">
-                        Here's what's happening with your content today.
+                        Here&apos;s what&apos;s happening with your content today.
                     </p>
                 </div>
 
