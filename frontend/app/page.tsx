@@ -12,7 +12,7 @@ const featuredArticles = [
         author: 'John Doe',
         readTime: '5 min read',
         likes: 234,
-        image: '/images/ai-future.jpg'
+        image: '/images/newai.jpg'
     },
     {
         id: 2,
@@ -21,7 +21,7 @@ const featuredArticles = [
         author: 'Jane Smith',
         readTime: '7 min read',
         likes: 189,
-        image: '/images/sustainable.jpg'
+        image: '/images/stock-market.jpg'
     },
     {
         id: 3,
@@ -30,7 +30,7 @@ const featuredArticles = [
         author: 'Mike Johnson',
         readTime: '6 min read',
         likes: 156,
-        image: '/images/digital.jpg'
+        image: '/images/ai.jpg'
     }
 ];
 
