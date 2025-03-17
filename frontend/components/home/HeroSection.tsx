@@ -28,7 +28,7 @@ const features = [
 
 export default function HeroSection() {
     return (
-        <div className="relative bg-gradient-to-r from-indigo-700 to-indigo-900 min-h-screen flex items-center justify-center">
+        <div className="relative bg-gradient-to-r from-indigo-500 to-indigo-700 min-h-screen flex items-center justify-center">
             {/* Background Pattern */}
             <div className="absolute inset-0">
                 <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10" />
