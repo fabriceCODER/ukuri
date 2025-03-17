@@ -5,7 +5,7 @@ interface User {
     id: string;
     name: string;
     email: string;
-    role: "admin" | "creator"; // Add other roles if necessary
+    role: "admin" | "creator"; 
     totalArticles: number;
     totalComments: number;
     totalViews: number;
