@@ -40,10 +40,10 @@ const FeaturedArticles = () => {
                 transition={{ duration: 0.5 }}
                 className="text-center"
             >
-                <h2 className="text-3xl sm:text-4xl font-bold text-white">
-                    Featured <span className="text-indigo-400">Articles</span>
+                <h2 className="text-3xl sm:text-4xl font-bold text-black">
+                    Featured <span className="text-indigo-600">Articles</span>
                 </h2>
-                <p className="mt-4 text-gray-300 max-w-2xl mx-auto">
+                <p className="mt-4 text-gray-700 max-w-2xl mx-auto">
                     Explore expert insights, trending topics, and in-depth analysis from industry professionals.
                 </p>
             </motion.div>
@@ -56,23 +56,23 @@ const FeaturedArticles = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                        className="bg-white/10 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 hover:border-indigo-500/50 transition-all duration-300 shadow-lg"
+                        className="bg-gray-100 rounded-xl overflow-hidden border border-gray-300 hover:border-indigo-500 transition-all duration-300 shadow-md"
                     >
                         <div className="p-6">
-                            <div className="flex items-center gap-2 text-sm text-gray-400 mb-3">
+                            <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
                                 <Clock className="h-4 w-4" />
                                 <span>{article.readTime}</span>
                                 <span className="mx-2">•</span>
                                 <ThumbsUp className="h-4 w-4" />
                                 <span>{article.likes}</span>
                             </div>
-                            <h3 className="text-xl font-semibold text-white mb-2">{article.title}</h3>
-                            <p className="text-gray-300 mb-4">{article.excerpt}</p>
+                            <h3 className="text-xl font-semibold text-black mb-2">{article.title}</h3>
+                            <p className="text-gray-700 mb-4">{article.excerpt}</p>
                             <div className="flex items-center justify-between">
                                 <span className="text-sm text-gray-500">By {article.author}</span>
                                 <Link
                                     href={`/articles/${article.id}`}
-                                    className="text-indigo-400 hover:text-indigo-300 text-sm font-medium inline-flex items-center gap-1 transition-colors duration-200"
+                                    className="text-indigo-600 hover:text-indigo-500 text-sm font-medium inline-flex items-center gap-1 transition-colors duration-200"
                                 >
                                     Read more
                                     <ArrowRight className="h-4 w-4" />
