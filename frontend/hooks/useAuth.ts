@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 interface User {
     id: string;
@@ -19,11 +20,10 @@ const useAuth = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await fetch("/api/auth/user");
-                const data = await response.json();
+                const response = await axios.get("/api/auth/user", { withCredentials: true });
 
-                if (data?.user) {
-                    setUser(data.user);
+                if (response.data?.user) {
+                    setUser(response.data.user);
                     setIsAuthenticated(true);
                 } else {
                     setIsAuthenticated(false);
