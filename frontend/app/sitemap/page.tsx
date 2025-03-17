@@ -16,8 +16,8 @@ const Sitemap = () => {
     return (
         <main className="min-h-screen flex flex-col items-center justify-center px-6 sm:px-12 lg:px-16 py-20">
             <div className="max-w-4xl w-full">
-                <h1 className="text-4xl font-extrabold text-white text-center mb-6">Sitemap</h1>
-                <p className="text-lg text-gray-300 text-center mb-10">
+                <h1 className="text-4xl font-extrabold text-black text-center mb-6">Sitemap</h1>
+                <p className="text-lg text-gray-700 text-center mb-10">
                     Browse all important sections of our website for easy navigation.
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -25,7 +25,7 @@ const Sitemap = () => {
                         <Link 
                             key={index} 
                             href={link.href} 
-                            className="block p-4 bg-gray-800/40 rounded-lg text-white hover:bg-indigo-500/30 transition-colors"
+                            className="block p-4 bg-gray-100 rounded-lg text-black hover:bg-indigo-100 transition-colors"
                         >
                             {link.title}
                         </Link>
