@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { Clock, ThumbsUp, ArrowRight } from "lucide-react";
 
@@ -30,13 +33,30 @@ const featuredArticles = [
 
 const FeaturedArticles = () => {
     return (
-        <div className="mt-24 w-full max-w-7xl mx-auto">
-            <h2 className="text-3xl font-bold text-white mb-12 text-center">Featured Articles</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
-                {featuredArticles.map((article) => (
-                    <div
+        <section className="max-w-6xl mx-auto px-6 sm:px-12 lg:px-16 py-20">
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-center"
+            >
+                <h2 className="text-3xl sm:text-4xl font-bold text-white">
+                    Featured <span className="text-indigo-400">Articles</span>
+                </h2>
+                <p className="mt-4 text-gray-300 max-w-2xl mx-auto">
+                    Explore expert insights, trending topics, and in-depth analysis from industry professionals.
+                </p>
+            </motion.div>
+
+            {/* Articles Grid */}
+            <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {featuredArticles.map((article, index) => (
+                    <motion.div
                         key={article.id}
-                        className="bg-gray-800/40 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-700/50 hover:border-indigo-500/50 transition-all duration-300"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                        className="bg-white/10 backdrop-blur-md rounded-xl overflow-hidden border border-white/10 hover:border-indigo-500/50 transition-all duration-300 shadow-lg"
                     >
                         <div className="p-6">
                             <div className="flex items-center gap-2 text-sm text-gray-400 mb-3">
@@ -47,7 +67,7 @@ const FeaturedArticles = () => {
                                 <span>{article.likes}</span>
                             </div>
                             <h3 className="text-xl font-semibold text-white mb-2">{article.title}</h3>
-                            <p className="text-gray-400 mb-4">{article.excerpt}</p>
+                            <p className="text-gray-300 mb-4">{article.excerpt}</p>
                             <div className="flex items-center justify-between">
                                 <span className="text-sm text-gray-500">By {article.author}</span>
                                 <Link
@@ -59,10 +79,10 @@ const FeaturedArticles = () => {
                                 </Link>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
                 ))}
             </div>
-        </div>
+        </section>
     );
 };
 
