@@ -29,7 +29,7 @@ UkuriKose is a modern, functional news website built using Next.js and Tailwind 
 ### Steps
 1. **Clone the Repository**
    ```sh
-   git clone https://github.com/yourusername/ukurikose.git
+   git clone https://github.com/fabriceCODER/ukurikose.git
    cd ukurikose
    ```
 2. **Install Dependencies**
@@ -88,5 +88,6 @@ This project is licensed under the MIT License.
 For any inquiries or suggestions, reach out to:
 - **Email**: fabricecoder009@gmail.com
 - **Twitter**: @Fabrice00023
+- **Watsapp**: +250-794-500-945
 - **Instagram**: @ishi-fab
 
