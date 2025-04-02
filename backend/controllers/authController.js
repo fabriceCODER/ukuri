@@ -22,6 +22,7 @@ export const register = async (req, res) => {
 
         res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
+        console.error("Error registering user:", error);
         res.status(500).json({ message: "Error registering user" });
     }
 };
@@ -41,16 +42,66 @@ export const login = async (req, res) => {
     }
 
     const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
-    
 
     res.json({ token });
 };
 
 // Get User Profile
 export const getUserProfile = async (req, res) => {
-    const user = await prisma.user.findUnique({ where: { id: req.user.id }, select: { id: true, name: true, email: true } });
-    if (!user) {
-        return res.status(404).json({ message: "User not found" });
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: req.user.id },
+            select: { id: true, name: true, email: true },
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json(user);
+    } catch (error) {
+        console.error("Error fetching profile:", error);
+        res.status(500).json({ message: "Failed to fetch user profile" });
     }
-    res.json(user);
+};
+
+// Update User Profile
+export const updateUser = async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        const userId = req.user.id;
+
+        let updatedData = { name, email };
+
+        if (password) {
+            updatedData.password = await bcrypt.hash(password, 10);
+        }
+
+        const updatedUser = await prisma.user.update({
+            where: { id: userId },
+            data: updatedData,
+            select: { id: true, name: true, email: true },
+        });
+
+        res.json(updatedUser);
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ message: "Failed to update user profile" });
+    }
+};
+
+// Delete User
+export const deleteUser = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        await prisma.user.delete({
+            where: { id: userId },
+        });
+
+        res.json({ message: "User deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        res.status(500).json({ message: "Failed to delete user" });
+    }
 };
