@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+// Add Comment
 export const addComment = async (req, res) => {
     try {
         const { content } = req.body;
@@ -32,14 +33,13 @@ export const addComment = async (req, res) => {
     }
 };
 
+// Get Comments
 export const getComments = async (req, res) => {
     try {
         const articleId = req.params.articleId;
 
         const comments = await prisma.comment.findMany({
-            where: {
-                articleId
-            },
+            where: { articleId },
             include: {
                 author: {
                     select: {
@@ -49,9 +49,7 @@ export const getComments = async (req, res) => {
                     }
                 }
             },
-            orderBy: {
-                createdAt: 'desc'
-            }
+            orderBy: { createdAt: 'desc' }
         });
 
         res.json(comments);
@@ -61,14 +59,42 @@ export const getComments = async (req, res) => {
     }
 };
 
+// Update Comment
+export const updateComment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { content } = req.body;
+        const userId = req.user.userId;
+
+        const comment = await prisma.comment.findUnique({ where: { id } });
+
+        if (!comment) {
+            return res.status(404).json({ error: "Comment not found" });
+        }
+
+        if (comment.authorId !== userId) {
+            return res.status(403).json({ error: "Not authorized to update this comment" });
+        }
+
+        const updatedComment = await prisma.comment.update({
+            where: { id },
+            data: { content }
+        });
+
+        res.json(updatedComment);
+    } catch (error) {
+        console.error("Error updating comment:", error);
+        res.status(500).json({ error: "Failed to update comment" });
+    }
+};
+
+// Delete Comment
 export const deleteComment = async (req, res) => {
     try {
         const { id } = req.params;
         const userId = req.user.userId;
 
-        const comment = await prisma.comment.findUnique({
-            where: { id }
-        });
+        const comment = await prisma.comment.findUnique({ where: { id } });
 
         if (!comment) {
             return res.status(404).json({ error: "Comment not found" });
@@ -78,9 +104,7 @@ export const deleteComment = async (req, res) => {
             return res.status(403).json({ error: "Not authorized to delete this comment" });
         }
 
-        await prisma.comment.delete({
-            where: { id }
-        });
+        await prisma.comment.delete({ where: { id } });
 
         res.json({ message: "Comment deleted successfully" });
     } catch (error) {
