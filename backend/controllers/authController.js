@@ -7,15 +7,23 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 // Register User
 export const register = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, confirmPassword } = req.body;
 
-    if (!name || !email || !password) {
+    // Check for required fields
+    if (!name || !email || !password || !confirmPassword) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
+    // Check if passwords match
+    if (password !== confirmPassword) {
+        return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
+        // Create the user in the database
         const user = await prisma.user.create({
             data: { name, email, password: hashedPassword },
         });
@@ -26,6 +34,7 @@ export const register = async (req, res) => {
         res.status(500).json({ message: "Error registering user" });
     }
 };
+
 
 // Login User
 export const login = async (req, res) => {

@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import compression from "compression";
 import "dotenv/config";
 
 import authRoutes from "./routes/authRoutes.js";
@@ -8,6 +9,9 @@ import commentRoutes from "./routes/commentRoutes.js";
 import likeRoutes from "./routes/likeRoutes.js";
 
 const app = express();
+
+app.use(compression());
+
 
 // CORS configuration
 app.use(cors({
