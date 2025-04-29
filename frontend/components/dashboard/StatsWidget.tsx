@@ -9,9 +9,10 @@ interface StatsWidgetProps {
     change?: number;
     icon?: React.ReactNode;
     trend?: 'up' | 'down' | 'neutral';
+    color?: string;
 }
 
-export default function StatsWidget({ title, value, change, icon, trend = 'neutral' }: StatsWidgetProps) {
+export default function StatsWidget({ title, value, change, icon, trend = 'neutral', color = 'bg-indigo-100' }: StatsWidgetProps) {
     const getTrendColor = () => {
         switch (trend) {
             case 'up':
@@ -35,7 +36,7 @@ export default function StatsWidget({ title, value, change, icon, trend = 'neutr
                     <p className="text-2xl font-semibold text-gray-900">{value.toLocaleString()}</p>
                 </div>
                 {icon && (
-                    <div className="h-12 w-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                    <div className={`h-12 w-12 rounded-full ${color} flex items-center justify-center text-indigo-600`}>
                         {icon}
                     </div>
                 )}

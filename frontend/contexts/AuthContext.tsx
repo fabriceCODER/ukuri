@@ -1,128 +1,131 @@
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { api } from '@/utils/api';
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { api } from "@/lib/api";
+import { setAuthToken } from "@/lib/axiosInstance"; 
 
 interface User {
-     id: string;
-     name: string;
-     email: string;
-     role: string;
+  id: string;
+  name: string;
+  email: string;
+  role: "admin" | "creator";
 }
 
 interface AuthContextType {
-     user: User | null;
-     loading: boolean;
-     error: string | null;
-     login: (email: string, password: string) => Promise<void>;
-     register: (name: string, email: string, password: string) => Promise<void>;
-     logout: () => Promise<void>;
-     clearError: () => void;
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string, confirmPassword: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-     const [user, setUser] = useState<User | null>(null);
-     const [loading, setLoading] = useState(true);
-     const [error, setError] = useState<string | null>(null);
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-     useEffect(() => {
-          checkAuth();
-     }, []);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      if (token) {
+        setAuthToken(token);
+      }
 
-     const checkAuth = async () => {
-          try {
-               const response = await api.auth.me();
-               if (response.data) {
-                    setUser(response.data);
-               }
-          } catch (err) {
-               console.error('Auth check failed:', err);
-          } finally {
-               setLoading(false);
-          }
-     };
+      setIsLoading(true);
+      const res = await api.auth.me();
+      if (res.data) {
+        const backendUser = res.data;
 
-     const login = async (email: string, password: string) => {
-          try {
-               setError(null);
-               const response = await api.auth.login(email, password);
+        const safeUser: User = {
+          id: backendUser.id,
+          name: backendUser.name,
+          email: backendUser.email,
+          role: backendUser.role === "admin" ? "admin" : "creator",
+        };
 
-               if (response.error) {
-                    throw new Error(response.error);
-               }
+        setUser(safeUser);
+        setIsAuthenticated(true);
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
+      }
+      setIsLoading(false);
+    };
 
-               if (response.data) {
-                    setUser(response.data.user);
-                    // Store the token if your API returns one
-                    if (response.data.token) {
-                         localStorage.setItem('token', response.data.token);
-                    }
-               }
-          } catch (err) {
-               setError(err instanceof Error ? err.message : 'Login failed');
-               throw err;
-          }
-     };
+    fetchUser();
+  }, []);
 
-     const register = async (name: string, email: string, password: string) => {
-          try {
-               setError(null);
-               const response = await api.auth.register(name, email, password);
+  const login = async (email: string, password: string) => {
+    const res = await api.auth.login(email, password);
+    if (res.data) {
+      localStorage.setItem("token", res.data.token);
+      setAuthToken(res.data.token);
 
-               if (response.error) {
-                    throw new Error(response.error);
-               }
+      const backendUser = res.data.user;
 
-               if (response.data) {
-                    setUser(response.data.user);
-                    // Store the token if your API returns one
-                    if (response.data.token) {
-                         localStorage.setItem('token', response.data.token);
-                    }
-               }
-          } catch (err) {
-               setError(err instanceof Error ? err.message : 'Registration failed');
-               throw err;
-          }
-     };
+      const safeUser: User = {
+        id: backendUser.id,
+        name: backendUser.name,
+        email: backendUser.email,
+        role: backendUser.role === "admin" ? "admin" : "creator",
+      };
 
-     const logout = async () => {
-          try {
-               await api.auth.logout();
-               setUser(null);
-               localStorage.removeItem('token');
-          } catch (err) {
-               console.error('Logout failed:', err);
-          }
-     };
+      setUser(safeUser);
+      setIsAuthenticated(true);
+    }
+  };
 
-     const clearError = () => {
-          setError(null);
-     };
+  const register = async (
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  ) => {
+    if (password !== confirmPassword) {
+      throw new Error("Passwords do not match");
+    }
+  
+    const res = await api.auth.register(name, email, password);
+  
+    if (res.data) {
+      localStorage.setItem("token", res.data.token);
+      setAuthToken(res.data.token);
+  
+      const backendUser = res.data.user;
+  
+      const safeUser: User = {
+        id: backendUser.id,
+        name: backendUser.name,
+        email: backendUser.email,
+        role: backendUser.role === "admin" ? "admin" : "creator",
+      };
+  
+      setUser(safeUser);
+      setIsAuthenticated(true);
+    }
+  };
+  
+  const logout = async () => {
+    localStorage.removeItem("token");
+    setAuthToken(null);
+    setUser(null);
+    setIsAuthenticated(false);
+  };
 
-     return (
-          <AuthContext.Provider
-               value={{
-                    user,
-                    loading,
-                    error,
-                    login,
-                    register,
-                    logout,
-                    clearError,
-               }}
-          >
-               {children}
-          </AuthContext.Provider>
-     );
-}
+  return (
+    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, login, register, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
-export function useAuth() {
-     const context = useContext(AuthContext);
-     if (context === undefined) {
-          throw new Error('useAuth must be used within an AuthProvider');
-     }
-     return context;
-} 
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};

@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from '@/utils/AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Bell, Search, Menu } from 'lucide-react';
 import { useState } from 'react';
 

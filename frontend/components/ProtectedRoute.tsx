@@ -1,43 +1,33 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/utils/AuthContext';
-import Loading from '@/app/loading';
+import { useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
-export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
-     const { user, isLoading } = useAuth();
-     const router = useRouter();
-     const [isRedirecting, setIsRedirecting] = useState(false);
+interface ProtectedRouteProps {
+  children: ReactNode;
+  allowedRoles?: ("admin" | "creator")[]; 
+}
 
-     useEffect(() => {
-          let timeoutId: NodeJS.Timeout;
+const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
 
-          if (!isLoading && !user && !isRedirecting) {
-               setIsRedirecting(true);
-               // Add a small delay before redirect to prevent flash of content
-               timeoutId = setTimeout(() => {
-                    router.push('/login');
-               }, 100);
-          }
+  useEffect(() => {
+    if (!isLoading) {
+      if (!isAuthenticated) {
+        router.push("/login");
+      } else if (allowedRoles && !allowedRoles.includes(user?.role as any)) {
+        router.push("/unauthorized"); // Create this page if needed
+      }
+    }
+  }, [isAuthenticated, isLoading, user, allowedRoles, router]);
 
-          return () => {
-               if (timeoutId) {
-                    clearTimeout(timeoutId);
-               }
-          };
-     }, [user, isLoading, router, isRedirecting]);
+  if (isLoading || !isAuthenticated) {
+    return <div className="text-center py-10">Loading...</div>;
+  }
 
-     // Show loading state while checking authentication or during redirect
-     if (isLoading || isRedirecting) {
-          return <Loading />;
-     }
+  return <>{children}</>;
+};
 
-     // If authenticated, render the protected content
-     if (user) {
-          return <>{children}</>;
-     }
-
-     // Return null while redirect is pending
-     return null;
-} 
+export default ProtectedRoute;
