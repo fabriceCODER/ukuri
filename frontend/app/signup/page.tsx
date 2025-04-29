@@ -1,43 +1,67 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, User, Linkedin, Loader2, Facebook } from "lucide-react";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 const Signup = () => {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const [passwordMatch, setPasswordMatch] = useState(true);
+    const [emailValid, setEmailValid] = useState(true);
     const router = useRouter();
+
+    const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    useEffect(() => {
+        setPasswordMatch(password === confirmPassword || confirmPassword === "");
+        setEmailValid(email === "" || validateEmail(email));
+    }, [password, confirmPassword, email]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
-
-        if (password !== confirmPassword) {
-            setError("Passwords do not match");
-            setIsLoading(false);
+        if (!name.trim() || !email.trim() || !password || !confirmPassword) {
+            toast.error("Please fill in all fields.");
             return;
         }
 
+        if (!validateEmail(email)) {
+            toast.error("Please enter a valid email.");
+            return;
+        }
+
+        if (password.length < 6) {
+            toast.error("Password must be at least 6 characters.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            toast.error("Passwords do not match.");
+            return;
+        }
+
+        setIsLoading(true);
         try {
             const response = await fetch("/api/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ name: name.trim(), email: email.trim(), password }),
             });
 
             const data = await response.json();
             if (response.ok) {
+                toast.success("Signup successful! Redirecting...");
                 router.push("/login");
             } else {
-                setError(data?.message || "Signup failed. Please try again.");
+                toast.error(data?.message || "Signup failed. Please try again.");
             }
         } catch (error) {
-            console.error("Signup 404:", error); 
-            setError("Something went wrong. Please try again later.");
+            console.error("Signup error:", error);
+            toast.error("Something went wrong. Please try again later.");
         } finally {
             setIsLoading(false);
         }
@@ -56,17 +80,19 @@ const Signup = () => {
                     <p className="text-gray-500 text-sm">Join us and start your journey!</p>
                 </div>
 
-                {error && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="bg-red-500 text-white text-center p-2 mb-4 rounded"
-                    >
-                        {error}
-                    </motion.div>
-                )}
-
                 <form onSubmit={handleSubmit}>
+                    <div className="mb-4 relative">
+                        <User className="absolute left-3 top-3 text-gray-400" />
+                        <input
+                            type="text"
+                            placeholder="Full Name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className="pl-10 p-2 w-full border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                            required
+                        />
+                    </div>
+
                     <div className="mb-4 relative">
                         <Mail className="absolute left-3 top-3 text-gray-400" />
                         <input
@@ -74,9 +100,14 @@ const Signup = () => {
                             placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="pl-10 p-2 w-full border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                            className={`pl-10 p-2 w-full border rounded-md focus:ring ${
+                                email && !emailValid ? "border-red-500 focus:ring-red-200" : "border-gray-300 focus:ring-blue-200"
+                            }`}
                             required
                         />
+                        {!emailValid && (
+                            <p className="text-red-500 text-sm mt-1 ml-1">Invalid email format</p>
+                        )}
                     </div>
 
                     <div className="mb-4 relative">
@@ -86,12 +117,17 @@ const Signup = () => {
                             placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="pl-10 p-2 w-full border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
+                            className={`pl-10 p-2 w-full border rounded-md focus:ring ${
+                                password && password.length < 6 ? "border-red-500 focus:ring-red-200" : "border-gray-300 focus:ring-blue-200"
+                            }`}
                             required
                         />
+                        {password && password.length < 6 && (
+                            <p className="text-red-500 text-sm mt-1 ml-1">Minimum 6 characters</p>
+                        )}
                     </div>
 
-                    <div className="mb-6 relative">
+                    <div className="mb-4 relative">
                         <Lock className="absolute left-3 top-3 text-gray-400" />
                         <input
                             type="password"
@@ -101,12 +137,17 @@ const Signup = () => {
                             className="pl-10 p-2 w-full border border-gray-300 rounded-md focus:ring focus:ring-blue-200"
                             required
                         />
+                        {!passwordMatch && (
+                            <p className="text-red-500 text-sm mt-1 ml-1">Passwords do not match</p>
+                        )}
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full flex items-center justify-center bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
-                        disabled={isLoading}
+                        className={`w-full flex items-center justify-center bg-blue-500 text-white p-2 rounded-md transition ${
+                            isLoading || !passwordMatch ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
+                        }`}
+                        disabled={isLoading || !passwordMatch}
                     >
                         {isLoading ? <Loader2 className="animate-spin" /> : "Sign Up"}
                     </button>
@@ -118,13 +159,17 @@ const Signup = () => {
 
                     <div className="mt-4">
                         <button
-                            className="w-full flex items-center justify-center bg-gray-800 text-white p-2 rounded-md hover:bg-gray-900 transition">
-                            <Facebook className="mr-2"/>
+                            type="button"
+                            className="w-full flex items-center justify-center bg-gray-800 text-white p-2 rounded-md hover:bg-gray-900 transition"
+                        >
+                            <Facebook className="mr-2" />
                             Sign Up with GitHub
                         </button>
                         <button
-                            className="w-full my-2 flex items-center justify-center bg-gray-800 text-white p-2 rounded-md hover:bg-gray-900 transition">
-                            <Linkedin className="mr-2"/>
+                            type="button"
+                            className="w-full my-2 flex items-center justify-center bg-gray-800 text-white p-2 rounded-md hover:bg-gray-900 transition"
+                        >
+                            <Linkedin className="mr-2" />
                             Sign Up with LinkedIn
                         </button>
                     </div>

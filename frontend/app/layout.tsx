@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { Toaster } from 'react-hot-toast';
 import './globals.css';
 import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
@@ -26,6 +27,8 @@ export default function RootLayout({
             <main className="flex-grow">{children}</main>
             <Footer />
           </div>
+          {/* Toast Notifications */}
+          <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
         </ClientLayout>
       </body>
     </html>
