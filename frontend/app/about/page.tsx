@@ -1,5 +1,5 @@
 'use client';
-
+import Link from "next/link";
 import { motion } from 'framer-motion';
 import { Award, Globe, BookOpen, Target, Rocket } from 'lucide-react';
 
@@ -135,14 +135,16 @@ export default function AboutPage() {
                     <p className="text-xl text-indigo-100 mb-8">
                         Join our community of writers and readers today.
                     </p>
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-indigo-50 transition-colors duration-200"
-                    >
-                        <Rocket className="h-5 w-5 mr-2" />
-                        Get Started
-                    </motion.button>
+                    <Link href="/register" passHref>
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-indigo-50 transition-colors duration-200"
+  >
+    <Rocket className="h-5 w-5 mr-2" />
+    Get Started
+  </motion.button>
+</Link>
                 </div>
             </motion.div>
         </div>
