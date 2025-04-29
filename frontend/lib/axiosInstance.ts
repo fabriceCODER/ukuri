@@ -1,4 +1,4 @@
-import { apiClient } from "./api"; // your axios instance
+import { apiClient } from "./api";
 
 export const setAuthToken = (token: string | null) => {
   if (token) {

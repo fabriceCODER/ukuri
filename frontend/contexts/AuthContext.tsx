@@ -105,6 +105,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   
       setUser(safeUser);
       setIsAuthenticated(true);
+    } else {
+      throw new Error(res.error || "Registration failed");
     }
   };
   

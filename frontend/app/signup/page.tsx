@@ -23,7 +23,7 @@ const Signup = () => {
         }
 
         try {
-            const response = await fetch("/api/auth/signup", {
+            const response = await fetch("/api/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
@@ -36,7 +36,7 @@ const Signup = () => {
                 setError(data?.message || "Signup failed. Please try again.");
             }
         } catch (error) {
-            console.error("Signup 404:", error); // ✅ Log 404 for debugging
+            console.error("Signup 404:", error); 
             setError("Something went wrong. Please try again later.");
         } finally {
             setIsLoading(false);
