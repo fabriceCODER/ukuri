@@ -1,32 +1,34 @@
 import axios from 'axios';
 
+// Set base API URL from environment or default to localhost
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
+// Create Axios instance
 export const apiClient = axios.create({
   baseURL: API_URL,
-  withCredentials: true, // Send cookies if needed
+  withCredentials: true, // Include cookies if needed
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Attach token automatically if available
+// Attach token to every request if available in localStorage
 apiClient.interceptors.request.use((config) => {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-  if (token) {
+  if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-// Define a generic response type
+// Define generic API response
 interface ApiResponse<T> {
   data?: T;
   error?: string;
   status: number;
 }
 
-// Define user-related response types
+// Authenticated user type
 interface User {
   id: string;
   name: string;
@@ -34,6 +36,7 @@ interface User {
   role: string;
 }
 
+// Response types
 interface LoginResponse {
   user: User;
   token: string;
@@ -44,6 +47,7 @@ interface RegisterResponse {
   token: string;
 }
 
+// Generic API call
 export async function apiRequest<T>(
   endpoint: string,
   method: 'GET' | 'POST' | 'PUT' | 'DELETE',
@@ -74,20 +78,37 @@ export async function apiRequest<T>(
   }
 }
 
-// Full API object
+// Main API object with defined endpoints
 export const api = {
   auth: {
     me: () => apiRequest<User>('/api/auth/me', 'GET'),
-    login: (email: string, password: string) =>
-      apiRequest<LoginResponse>('/api/auth/login', 'POST', { email, password }),
-    register: (name: string, email: string, password: string) =>
-      apiRequest<RegisterResponse>('/api/auth/register', 'POST', { name, email, password }),
-    logout: () => apiRequest('/api/auth/logout', 'POST'),
-    googleLogin: () => apiRequest<{ url: string }>('/api/auth/google', 'GET'),
-    githubLogin: () => apiRequest<{ url: string }>('/api/auth/github', 'GET'),
-    handleOAuthCallback: <T>(provider: string, code: string) =>
-      apiRequest<T>(`/api/auth/${provider}/callback`, 'POST', { code }),
+    login: async (email: string, password: string) => {
+      const response = await apiRequest<LoginResponse>('/api/auth/login', 'POST', {
+        email,
+        password,
+      });
+      if (response.data?.token) {
+        localStorage.setItem('token', response.data.token); // Store token after login
+      }
+      return response;
+    },
+    register: async (name: string, email: string, password: string) => {
+      const response = await apiRequest<RegisterResponse>('/api/auth/register', 'POST', {
+        name,
+        email,
+        password,
+      });
+      if (response.data?.token) {
+        localStorage.setItem('token', response.data.token); // Store token after registration
+      }
+      return response;
+    },
+    logout: () => {
+      localStorage.removeItem('token'); // Clear token
+      return apiRequest('/api/auth/logout', 'POST');
+    },
   },
+
   articles: {
     getAll: () => apiRequest('/api/articles', 'GET'),
     getOne: (id: string) => apiRequest(`/api/articles/${id}`, 'GET'),
@@ -96,11 +117,13 @@ export const api = {
     delete: (id: string) => apiRequest(`/api/articles/${id}`, 'DELETE'),
     getStats: () => apiRequest('/api/articles/stats', 'GET'),
   },
+
   comments: {
     create: (articleId: string, content: string) =>
       apiRequest('/api/comments', 'POST', { articleId, content }),
     delete: (id: string) => apiRequest(`/api/comments/${id}`, 'DELETE'),
   },
+
   likes: {
     toggle: (articleId: string) => apiRequest('/api/likes', 'POST', { articleId }),
   },
