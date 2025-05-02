@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 
-const NewsletterSubscription = () => {
+const Newsletter = () => {
     const [email, setEmail] = useState("");
 
     const handleSubscribe = (e: React.FormEvent) => {
@@ -11,21 +11,29 @@ const NewsletterSubscription = () => {
     };
 
     return (
-        <section className="bg-blue-600 text-white py-10">
-            <div className="container mx-auto text-center">
-                <h2 className="text-2xl font-bold">📩 Subscribe to Our Newsletter</h2>
-                <p className="mt-2">Get the latest news delivered to your inbox.</p>
+        <section className="relative overflow-hidden py-20 px-4 sm:px-10 bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-700 text-white w-full">
+            {/* Animated Blob Backgrounds */}
+            <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-indigo-400 opacity-30 rounded-full mix-blend-multiply filter blur-3xl animate-pulse z-0"></div>
+            <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-pink-400 opacity-20 rounded-full mix-blend-multiply filter blur-2xl animate-pulse z-0"></div>
 
-                <form onSubmit={handleSubscribe} className="mt-4 flex justify-center">
+            {/* Main Card - Now Full Width */}
+            <div className="relative z-10 w-full bg-white/10 backdrop-blur-md px-6 py-12 sm:px-12 text-center rounded-[40%_10%_40%_10%/10%_40%_10%_40%] shadow-2xl">
+                <h2 className="text-3xl font-extrabold mb-3">📩 Join Our Newsletter</h2>
+                <p className="text-white/90 mb-6 text-lg">Stay updated with our latest content and offers.</p>
+
+                <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-3xl mx-auto">
                     <input
                         type="email"
-                        placeholder="Enter your email"
+                        placeholder="you@example.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="px-4 py-2 rounded-l-lg text-gray-800 focus:outline-none"
+                        className="w-full sm:w-[300px] px-5 py-3 rounded-full text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
                         required
                     />
-                    <button type="submit" className="bg-gray-900 px-4 py-2 rounded-r-lg hover:bg-gray-800 transition">
+                    <button
+                        type="submit"
+                        className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-full hover:bg-blue-100 transition duration-300"
+                    >
                         Subscribe
                     </button>
                 </form>
@@ -34,4 +42,4 @@ const NewsletterSubscription = () => {
     );
 };
 
-export default NewsletterSubscription;
+export default Newsletter;

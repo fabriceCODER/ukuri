@@ -3,6 +3,7 @@
 import HeroSection from "@/components/home/HeroSection";
 import FeaturesSection from "@/components/home/FeaturesSection";
 import FeaturedArticles from "@/components/home/FeaturedArticles";
+import Newsletter from "@/components/common/Newsletter";
 
 const HomePage = () => {
     return (
@@ -19,6 +20,9 @@ const HomePage = () => {
 
             <section className="w-full max-w-7xl mx-auto px-6 sm:px-12 lg:px-16">
                 <FeaturedArticles />
+            </section>
+            <section className="w-full px-6 sm:px-12 lg:px-16">
+                <Newsletter />
             </section>
         </main>
     );

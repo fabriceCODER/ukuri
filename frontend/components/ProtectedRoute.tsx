@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import Spinner from "./common/Spinner";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -24,7 +25,7 @@ const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
   }, [isAuthenticated, isLoading, user, allowedRoles, router]);
 
   if (isLoading || !isAuthenticated) {
-    return <div className="text-center py-10">Loading...</div>;
+    return <Spinner />
   }
 
   return <>{children}</>;

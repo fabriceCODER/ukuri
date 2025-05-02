@@ -1,8 +1,15 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import Cookies from "js-cookie";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 import { api } from "@/lib/api";
-import { setAuthToken } from "@/lib/axiosInstance"; 
+import { setAuthToken } from "@/lib/axiosInstance";
 
 interface User {
   id: string;
@@ -16,7 +23,12 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string, confirmPassword: string) => Promise<void>;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+    confirmPassword: string
+  ) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -29,29 +41,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+      const token = Cookies.get("token");
+
       if (token) {
         setAuthToken(token);
+        try {
+          const res = await api.auth.me();
+          if (res.data) {
+            const backendUser = res.data;
+            const safeUser: User = {
+              id: backendUser.id,
+              name: backendUser.name,
+              email: backendUser.email,
+              role: backendUser.role === "admin" ? "admin" : "creator",
+            };
+            setUser(safeUser);
+            setIsAuthenticated(true);
+          } else {
+            throw new Error("Invalid user data");
+          }
+        } catch {
+          Cookies.remove("token");
+          setUser(null);
+          setIsAuthenticated(false);
+        }
       }
 
-      setIsLoading(true);
-      const res = await api.auth.me();
-      if (res.data) {
-        const backendUser = res.data;
-
-        const safeUser: User = {
-          id: backendUser.id,
-          name: backendUser.name,
-          email: backendUser.email,
-          role: backendUser.role === "admin" ? "admin" : "creator",
-        };
-
-        setUser(safeUser);
-        setIsAuthenticated(true);
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
-      }
       setIsLoading(false);
     };
 
@@ -59,12 +74,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const res = await api.auth.login(email, password);
-    if (res.data) {
-      localStorage.setItem("token", res.data.token);
-      setAuthToken(res.data.token);
+    try {
+      const res = await api.auth.login(email, password);
+      if (!res.data) throw new Error(res.error || "Login failed");
 
-      const backendUser = res.data.user;
+      const { token, user: backendUser } = res.data;
+      Cookies.set("token", token);
+      setAuthToken(token);
 
       const safeUser: User = {
         id: backendUser.id,
@@ -75,6 +91,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       setUser(safeUser);
       setIsAuthenticated(true);
+    } catch (err: any) {
+      throw new Error(err.message || "Login failed");
     }
   };
 
@@ -87,38 +105,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (password !== confirmPassword) {
       throw new Error("Passwords do not match");
     }
-  
-    const res = await api.auth.register(name, email, password);
-  
-    if (res.data) {
-      localStorage.setItem("token", res.data.token);
-      setAuthToken(res.data.token);
-  
-      const backendUser = res.data.user;
-  
+
+    try {
+      const res = await api.auth.register(name, email, password);
+      if (!res.data) throw new Error(res.error || "Registration failed");
+
+      const { token, user: backendUser } = res.data;
+      Cookies.set("token", token);
+      setAuthToken(token);
+
       const safeUser: User = {
         id: backendUser.id,
         name: backendUser.name,
         email: backendUser.email,
         role: backendUser.role === "admin" ? "admin" : "creator",
       };
-  
+
       setUser(safeUser);
       setIsAuthenticated(true);
-    } else {
-      throw new Error(res.error || "Registration failed");
+    } catch (err: any) {
+      throw new Error(err.message || "Registration failed");
     }
   };
-  
+
   const logout = async () => {
-    localStorage.removeItem("token");
+    Cookies.remove("token");
     setAuthToken(null);
     setUser(null);
     setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, login, register, logout }}>
+    <AuthContext.Provider
+      value={{ user, isAuthenticated, isLoading, login, register, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

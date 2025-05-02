@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
-import { api } from '@/utils/api';
+import { api } from '@/lib/api';
+import DashboardLoading from '../dashboard/loading';
 
 interface Profile {
     name: string;
@@ -35,7 +36,7 @@ export default function ProfilePage() {
         }
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <DashboardLoading />;
     if (error) return <div>Error: {error}</div>;
     if (!profile) return null;
 
