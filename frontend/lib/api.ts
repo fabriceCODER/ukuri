@@ -127,4 +127,8 @@ export const api = {
   likes: {
     toggle: (articleId: string) => apiRequest('/api/likes', 'POST', { articleId }),
   },
+
+  users: {
+    getAll: () => apiRequest('/api/users', 'GET'), 
+  },
 };
