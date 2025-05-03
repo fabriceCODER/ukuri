@@ -2,11 +2,11 @@ import { PrismaClient } from "@prisma/client";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import router from "../routes/authRoutes.js";
+import router from "../routes/authRoutes.js";  // Assuming you still need to import this
 
 const prisma = new PrismaClient();
 
-// Set up multer storage and file naming
+// Set up multer storage and file naming for image uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const uploadDir = path.join(__dirname, "../public/uploads");
@@ -24,10 +24,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+// Create an article
 export const createArticle = async (req, res) => {
-    // Use multer middleware to handle file upload in the route (not here in the controller)
-    // Attach the image file to the req object as req.file
-
     try {
         const { title, content, category } = req.body;
         const authorId = req.user.userId;
@@ -48,6 +46,7 @@ export const createArticle = async (req, res) => {
     }
 };
 
+// Get all articles
 export const getArticles = async (req, res) => {
     try {
         const articles = await prisma.article.findMany({ include: { author: true } });
@@ -57,12 +56,14 @@ export const getArticles = async (req, res) => {
     }
 };
 
+// Get an article by ID
 export const getArticleById = async (req, res) => {
     try {
         const article = await prisma.article.findUnique({
             where: { id: req.params.id },
             include: { author: true },
         });
+
         if (!article) return res.status(404).json({ error: "Article not found" });
         res.json(article);
     } catch (error) {
@@ -70,6 +71,7 @@ export const getArticleById = async (req, res) => {
     }
 };
 
+// Update an article
 export const updateArticle = async (req, res) => {
     try {
         const { title, content, category } = req.body;
@@ -84,6 +86,7 @@ export const updateArticle = async (req, res) => {
     }
 };
 
+// Delete an article
 export const deleteArticle = async (req, res) => {
     try {
         await prisma.article.delete({ where: { id: req.params.id } });
@@ -93,11 +96,34 @@ export const deleteArticle = async (req, res) => {
     }
 };
 
+// Get statistics for articles
+export const getArticleStats = async (req, res) => {
+    try {
+        // Count the total number of articles
+        const totalArticles = await prisma.article.count();
+        
+        // Add more stats as needed (e.g., most viewed, articles per category, etc.)
+        // Example: Get the most recent article
+        const mostRecentArticle = await prisma.article.findFirst({
+            orderBy: { createdAt: 'desc' },
+        });
+
+        const stats = {
+            totalArticles,
+            mostRecentArticle,
+        };
+
+        res.json(stats);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch article statistics" });
+    }
+};
+
 export default {
     createArticle,
     getArticles,
     getArticleById,
     updateArticle,
-    deleteArticle
+    deleteArticle,
+    getArticleStats,
 };
-

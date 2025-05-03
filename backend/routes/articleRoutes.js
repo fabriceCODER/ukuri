@@ -2,7 +2,7 @@ import express from "express";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import { createArticle, getArticles, getArticleById, updateArticle, deleteArticle } from "../controllers/articleController.js";
+import { createArticle, getArticles, getArticleById, updateArticle, deleteArticle, getArticleStats } from "../controllers/articleController.js";
 import authenticate from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
@@ -44,5 +44,8 @@ router.get("/", getArticles);
 router.get("/:id", getArticleById);
 router.put("/:id", authenticate, upload.single("image"), updateArticle);
 router.delete("/:id", authenticate, deleteArticle);
+
+// Statistics route
+router.get("/stats", getArticleStats); // New route for stats
 
 export default router;
