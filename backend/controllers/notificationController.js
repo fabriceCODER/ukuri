@@ -44,6 +44,48 @@ export const createNotification = async (req, res) => {
   }
 };
 
+export const getUnreadCount = async (req, res) => {
+     const userId = req.user.id;
+   
+     try {
+       const count = await prisma.notification.count({
+         where: {
+           userId,
+           isRead: false,
+         },
+       });
+       res.status(200).json({ unreadCount: count });
+     } catch (error) {
+       console.error('Failed to get unread count:', error);
+       res.status(500).json({ error: 'Failed to get unread count' });
+     }
+   };
+   
+
+export const deleteNotification = async (req, res) => {
+     const userId = req.user.id;
+     const isAdmin = req.user.role === 'admin';
+     const { id } = req.params;
+   
+     try {
+       const notification = await prisma.notification.findUnique({ where: { id } });
+   
+       if (!notification) {
+         return res.status(404).json({ error: 'Notification not found' });
+       }
+   
+       if (!isAdmin && notification.userId !== userId) {
+         return res.status(403).json({ error: 'Not authorized to delete this notification' });
+       }
+   
+       await prisma.notification.delete({ where: { id } });
+       res.status(200).json({ message: 'Notification deleted successfully' });
+     } catch (error) {
+       console.error('Delete failed:', error);
+       res.status(500).json({ error: 'Failed to delete notification' });
+     }
+   };
+   
 /**
  * Mark a specific notification as read
  */
