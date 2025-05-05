@@ -119,10 +119,13 @@ export const api = {
   },
 
   comments: {
+    getAll: (articleId: string) =>
+      apiRequest<Comment[]>(`/api/comments/${articleId}`, 'GET'),
     create: (articleId: string, content: string) =>
-      apiRequest('/api/comments', 'POST', { articleId, content }),
+      apiRequest<Comment>('/api/comments', 'POST', { articleId, content }),
     delete: (id: string) => apiRequest(`/api/comments/${id}`, 'DELETE'),
   },
+  
 
   likes: {
     toggle: (articleId: string) => apiRequest('/api/likes', 'POST', { articleId }),
