@@ -3,7 +3,9 @@ import {
   getUserNotifications,
   createNotification,
   markAsRead,
-  getAllNotifications
+  getAllNotifications,
+  deleteNotification,
+  getUnreadCount
 } from '../controllers/notificationController.js';
 import { verifyToken } from '../middlewares/authMiddleware.js';
 

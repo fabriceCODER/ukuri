@@ -44,7 +44,19 @@ export const createNotification = async (req, res) => {
   }
 };
 
-
+export const getAllNotifications = async (req, res) => {
+     try {
+       const notifications = await prisma.notification.findMany({
+         orderBy: { createdAt: 'desc' },
+         include: { user: true }, // optionally include user info
+       });
+       res.status(200).json(notifications);
+     } catch (error) {
+       console.error('Failed to fetch all notifications:', error);
+       res.status(500).json({ error: 'Failed to fetch all notifications' });
+     }
+   };
+   
 
 export const getUnreadCount = async (req, res) => {
      const userId = req.user.id;
