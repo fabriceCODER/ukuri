@@ -44,6 +44,8 @@ export const createNotification = async (req, res) => {
   }
 };
 
+
+
 export const getUnreadCount = async (req, res) => {
      const userId = req.user.id;
    

@@ -13,6 +13,10 @@ router.get('/', verifyToken, getUserNotifications);
 router.post('/', verifyToken, createNotification);
 router.patch('/:id/read', verifyToken, markAsRead);
 router.get('/all', verifyToken, isAdmin, getAllNotifications);
+router.get('/unread/count', verifyToken, getUnreadCount);
+router.delete('/:id', verifyToken, deleteNotification);
+
+
 
 
 export default router;
