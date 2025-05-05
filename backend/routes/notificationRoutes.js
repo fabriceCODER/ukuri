@@ -3,6 +3,7 @@ import {
   getUserNotifications,
   createNotification,
   markAsRead,
+  getAllNotifications
 } from '../controllers/notificationController.js';
 import { verifyToken } from '../middlewares/authMiddleware.js';
 
@@ -11,5 +12,7 @@ const router = express.Router();
 router.get('/', verifyToken, getUserNotifications);
 router.post('/', verifyToken, createNotification);
 router.patch('/:id/read', verifyToken, markAsRead);
+router.get('/all', verifyToken, isAdmin, getAllNotifications);
+
 
 export default router;
