@@ -1,12 +1,8 @@
 import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "../utils/config.js"; 
 
-// Ensure the secret is defined
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET is not defined in environment variables.");
-}
-
-const authenticate = (req, res, next) => {
+// Middleware for verifying JWT token
+export const verifyToken = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -15,22 +11,16 @@ const authenticate = (req, res, next) => {
     }
 
     const token = authHeader.split(" ")[1];
-    if (!token) {
-      return res.status(401).json({ error: "Token missing." });
-    }
-
     const decoded = jwt.verify(token, JWT_SECRET);
 
     if (!decoded?.id) {
       return res.status(403).json({ error: "Invalid token. User ID not found." });
     }
 
-    req.user = decoded; // Attach to request
+    req.user = decoded; // Attach the decoded user data to the request
     next();
   } catch (error) {
     console.error("JWT Verification Error:", error.message);
     return res.status(403).json({ error: "Invalid or expired token." });
   }
 };
-
-export default authenticate;
